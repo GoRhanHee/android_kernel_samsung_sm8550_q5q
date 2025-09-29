@@ -124,17 +124,19 @@ static int __init enforcing_setup(char *str)
 	unsigned long enforcing;
 	if (!kstrtoul(str, 0, &enforcing)) {
 // [ SEC_SELINUX_PORTING_COMMON
-#ifdef CONFIG_ALWAYS_ENFORCE
-		selinux_enforcing_boot = 1;
-		selinux_enforcing = 1;
+#if defined(CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE)
+        selinux_enforcing_boot = 0;
+        selinux_enforcing = 0;
+#elif defined(CONFIG_ALWAYS_ENFORCE) || defined(CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE)
+        selinux_enforcing_boot = 1;
+        selinux_enforcing = 1;
 #else
-		selinux_enforcing_boot = enforcing ? 1 : 0;
-		selinux_enforcing = enforcing ? 1 : 0;
+        selinux_enforcing_boot = enforcing ? 1 : 0;
+        selinux_enforcing = enforcing ? 1 : 0;
 #endif
-	
-	}
 	// ] SEC_SELINUX_PORTING_COMMON
-	return 1;
+	}
+	return 1;		
 }
 __setup("enforcing=", enforcing_setup);
 #else
