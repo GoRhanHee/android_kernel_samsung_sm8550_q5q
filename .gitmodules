@@ -1,0 +1,3 @@
+[submodule "kernel_platform/mkbootimg"]
+	path = kernel_platform/mkbootimg
+	url = https://github.com/GoRhanHee/android_system_tools_mkbootimg.git
