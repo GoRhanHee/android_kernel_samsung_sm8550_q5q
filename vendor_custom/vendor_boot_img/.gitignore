@@ -23,4 +23,3 @@ aosp/apksigner/bin/
 aosp/boot_signer/bin/
 bbootimg/bin/
 helper/bin/
-build/

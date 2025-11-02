@@ -1,10 +1,7 @@
 .vscode/
 .idea/
-EXTRACTED_IMAGES/*
-REPACKED_IMAGES/*
 *.conf
 CONFIGS/*
 !*/.gitkeep
 .DS_Store
 Thumbs.db
-

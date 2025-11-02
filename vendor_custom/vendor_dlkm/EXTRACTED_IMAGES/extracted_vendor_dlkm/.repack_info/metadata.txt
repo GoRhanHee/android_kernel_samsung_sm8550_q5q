@@ -1,0 +1,4 @@
+UNPACK_TIME=1762096563
+SOURCE_IMAGE=/home/test1/zfold5/Kernel/vendor_custom/vendor_dlkm/INPUT_IMAGES/vendor_dlkm.img
+FILESYSTEM_TYPE=erofs
+MOUNT_METHOD=kernel
