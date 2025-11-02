@@ -1,8 +1,5 @@
 .vscode/
 .idea/
-*.img
-*.sparse.img
-INPUT_IMAGES/*
 EXTRACTED_IMAGES/*
 REPACKED_IMAGES/*
 *.conf
