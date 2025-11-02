@@ -1,364 +1,205 @@
-# Android_boot_image_editor
-[![CI](https://github.com/cfig/Android_boot_image_editor/actions/workflows/main.yml/badge.svg)](https://github.com/cfig/Android_boot_image_editor/actions/workflows/main.yml)
-[![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](http://www.apache.org/licenses/LICENSE-2.0.html)
+# Android Image Tools 🛠️
 
-A tool for reverse engineering Android ROM images.
+[![GitHub Release](https://img.shields.io/github/v/release/ravindu644/Android_Image_Tools)](https://github.com/ravindu644/Android_Image_Tools/releases)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-##  Requirements
-Make sure you have [JDK11+](https://www.oracle.com/java/technologies/downloads/#java17) and [Python3](https://www.python.org/downloads/).
+A powerful, user-friendly Linux script for unpacking and repacking Android images with full filesystem support, SELinux context preservation, and seamless automation. Like CRB Kitchen, but native to Linux with cross-distro compatibility and advanced CI/CD features.
 
-* Linux / WSL: `sudo apt install git device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full android-sdk-libsparse-utils erofs-utils`
+<details>
+<summary><strong>Click here to preview the interface</strong></summary>
 
-* Mac: `brew install lz4 xz dtc`
+![Android Image Tools Screenshot](.bin/screenshots/1.png)
 
-* Windows: Install openssl and device-tree compiler with [chocolate](https://chocolatey.org/install)
-`choco install openssl dtc-msys2 zip vim`
+</details>
 
-## Getting Started
-Put your boot.img to current directory, then start gradle 'unpack' task:
+## ✨ What It Does
+
+- **Unpack Android Images**: Extract partitions from `.img` files to editable directories
+- **Modify Files**: Edit system files, apps, configurations, etc.
+- **Repack Images**: Rebuild bootable Android images with your changes
+- **Super Image Support**: Handle complex multi-partition `super.img` files
+- **Filesystem Conversion**: Convert between ext4, EROFS, and F2FS formats
+- **SELinux Preservation**: Maintain security contexts for bootable images
+- **Automation Ready**: Generate configs automatically for CI/CD pipelines
+
+## 🚀 Quick Start
+
+### Basic Usage
 
 ```bash
-cp <original_boot_image> boot.img
-./gradlew unpack
+# Interactive mode
+sudo ./android_image_tools.sh
+
+# Automated mode with config
+sudo ./android_image_tools.sh --conf=config.conf
 ```
 
-Your get the flattened kernel and /root filesystem under **./build/unzip\_boot**:
+### Simple Workflow
 
-    build/unzip_boot/
-    ├── boot.json     (boot image info)
-    ├── boot.avb.json (AVB only)
-    ├── kernel
-    ├── second        (2nd bootloader, if exists)
-    ├── dtb           (dtb, if exists)
-    ├── dtbo          (dtbo, if exists)
-    └── root          (extracted initramfs)
+1. Place your `.img` file in `INPUT_IMAGES/`
+2. Run the tool and select "Unpack an Android Image"
+3. Edit files in the extracted directory
+4. Select "Repack a Directory" to rebuild
+5. Find your new image in `REPACKED_IMAGES/`
 
-Then you can edit the actual file contents, like rootfs or kernel.
-Now, pack the boot.img again
+## 📋 Features
 
-    ./gradlew pack
+| Feature | Description |
+|---------|-------------|
+| **Open Source** | Free, transparent, and community-driven |
+| **Cross-Distro Compatible** | Ubuntu/Debian + Fedora/RHEL |
+| **Filesystem Support** | ext4, EROFS, F2FS |
+| **SELinux Preservation** | Maintains Android security contexts |
+| **Interactive GUI** | Easy terminal menu interface |
+| **Auto Config Generation** | No manual config creation needed |
+| **CI/CD Ready** | Full automation support |
+| **Super Image Handling** | Multi-partition Android images |
+| **Compression Options** | LZ4, LZ4HC, Deflate algorithms |
+| **Filesystem Conversion** | Convert between any supported formats |
+| **Sparse Image Support** | Automatic format handling |
+| **Smart Cleanup** | Automatic temp file management |
 
-You get the repacked boot.img at $(CURDIR):
+### Prerequisites
+- **Root access** (sudo required)
+- **Architecture**: x86_64 (AMD64) based system required
+- **Supported Distributions**: Ubuntu/Debian-based or Fedora/RHEL-based Linux distributions
+- **Linux kernel** with loop device support *(preferred method, provides best performance and SELinux compatibility)*
+- **FUSE support** (fallback option for restricted environments, but buggy/limited in SELinux environments)
 
-    boot.img.signed
+*Required packages are installed automatically*
 
-Well done you did it! The last step is to star this repo :smile
+## 📖 Detailed Usage
 
+### Main Menu Options
 
-### live demo
-<!-- ![](doc/op.gif) -->
-<p align="center">
-    <img src=doc/op.gif width="615" height="492">
-</p>
+- **Unpack an Android Image**: Extract single partition images
+- **Repack a Directory**: Rebuild images from extracted folders
+- **Generate Config File**: Create automation templates
+- **Advanced Tools**: Super image operations
+- **Cleanup Workspace**: Remove temporary files
 
-## Supported ROM image types
+### Automation Setup
 
-| Image Type      | file names                                                     | platforms   | note                    |
-| --------------- |----------------------------------------------------------------|-------------|-------------------------|
-| boot            | boot.img, init_boot.img, boot-debug.img, boot-test-harness.img | all         |                         |
-|vendor boot      | vendor_boot.img, vendor_boot-debug.img, vendor_kernel_boot.img | all         |                         |
-| recovery        | recovery.img, recovery-two-step.img                            | all         |                         |
-| vbmeta          | vbmeta.img, vbmeta_system.img etc.                             | all         |                         |
-| dtbo            | dtbo.img                                                       | linux & mac |                         |
-| dtb             | *.dtb                                                          | linux & mac |                         |
-| sparse images   | system.img, vendor.img, product.img etc.                       | linux       |                         |
-| OTA payload     | payload.bin                                                    | all         | Windows git-bash        |
+The tool eliminates manual config creation:
 
-Please note that the boot.img MUST follows AOSP verified boot flow, either [Boot image signature](https://source.android.com/security/verifiedboot/verified-boot#signature_format) in VBoot 1.0 or [AVB HASH footer](https://android.googlesource.com/platform/external/avb/+/master/README.md#The-VBMeta-struct) (a.k.a. AVB) in VBoot 2.0.
-
-## compatible devices
-
-| Device Model                   | Manufacturer | Compatible           | Android Version          | Note |
-|--------------------------------|--------------|----------------------|--------------------------|------|
-| Pixel 7 (panther)              | Google       | Y                    | 13 (TQ2A.230505.002) <Br>2023)| |
-| ADT-3 (adt3)                   | Askey/Google | Y                    | 12 (spp2.210219.010)     | amlogic inside, <Br>Android TV |
-| Pixel 3 (blueline)             | Google       | Y                    | 12 (spp2.210219.008, <Br>2021)| |
-| Pixel 3 (blueline)             | Google       | Y                    | 11 (RP1A.200720.009, <Br>2020)| [more ...](doc/additional_tricks.md#pixel-3-blueline) |
-| Pixel 3 (blueline)             | Google       | Y                    | Q preview (qpp2.190228.023, <Br>2019)| [more ...](doc/additional_tricks.md#pixel-3-blueline) |
-| Redmi K30 4G (phoenix[n])      | XiaoMi       | Y                    | 10 | [verified](https://github.com/cfig/Android_boot_image_editor/issues/17#issuecomment-817169307) by @eebssk1 |
-| TS10                           | Topway       | Y                    | 10                       | car headunit, @mariodantas |
-| Pixel XL (marlin)              | HTC          | Y                    | 9.0.0 (PPR2.180905.006, <Br>Sep 2018)| [more ...](doc/additional_tricks.md#pixel-xl-marlin) |
-| K3 (CPH1955)                   | OPPO         | Y for recovery.img<Br> N for boot.img  | Pie    | [more](doc/additional_tricks.md#k3-cph1955) |
-| Z18 (NX606J)                   | ZTE          | Y                    | 8.1.0                    | [more...](doc/additional_tricks.md#nx606j) |
-| Nexus 9 (volantis/flounder)    | HTC          | Y(with some tricks)  | 7.1.1 (N9F27M, Oct 2017) | [tricks](doc/additional_tricks.md#tricks-for-nexus-9volantis)|
-| Nexus 5x (bullhead)            | LG           | Y                    | 6.0.0_r12 (MDA89E)       |      |
-| Moto X (2013) T-Mobile         | Motorola     | N                    |                          |      |
-| X7 (PD1602_A_3.12.8)           | VIVO         | N                    | ?                        | [Issue 35](https://github.com/cfig/Android_boot_image_editor/issues/35) |
-| Realme GT Neo 3                | Realme       | N                    | 12                       | [Issue 105](https://github.com/cfig/Android_boot_image_editor/issues/105) |
-
-## more examples
-<details>
-  <summary>working with recovery.img</summary>
-
-Please remember to clean the work directory first.
-
+#### Method 1: Export During Repacking
 ```bash
-rm *.img
-cp <your_recovery_image> recovery.img
-./gradlew unpack
-./gradlew pack
+sudo ./android_image_tools.sh
+# Navigate: Repack a Directory → Complete setup → "Export selected settings"
 ```
+Creates a ready-to-use config file automatically.
 
-</details>
-
-<details>
-  <summary>working with vbmeta.img</summary>
-
-
+#### Method 2: Export During Unpacking
 ```bash
-rm *.img
-cp <your_vbmeta_image> vbmeta.img
-./gradlew unpack
-./gradlew pack
+sudo ./android_image_tools.sh
+# Navigate: Unpack an Android Image → Complete setup → "Export selected settings"
+# Or: Advanced Tools → Super Image Kitchen → Unpack a Super Image → "Export selected settings"
 ```
+Creates reusable config files for automation workflows.
 
-</details>
-
-<details>
-  <summary>clean workspace</summary>
-When you finished current work and need to clean the workspace for next image, it's a good idea to call the `clear` command:
-
+#### Method 3: Super Image Configuration
 ```bash
-./gradlew clear
+sudo ./android_image_tools.sh
+# Navigate: Advanced Tools → Super Image Kitchen → Finalize Project Configuration
 ```
+Automatically generates complex multi-partition configs.
 
-</details>
-
-<details>
-  <summary>working with boot.img and vbmeta.img</summary>
-
-If your vbmeta.img contains hash of boot.img, you MUST update vbmeta image together.
-
+#### Using Generated Configs
 ```bash
-rm *.img
-cp <your_boot_image> boot.img
-cp <your_vbmeta_image> vbmeta.img
-./gradlew unpack
-./gradlew pack
+# Run automated operations
+sudo ./android_image_tools.sh --conf=generated_config.conf
 ```
-Your boot.img.signed and vbmeta.img.signd will be updated together, then you can flash them to your device.
 
-</details>
+### Config File Examples
 
-<details>
-  <summary>working with vendor_boot.img + vbmeta.img (Pixel 5 etc.)</summary>
-Most devices include hash descriptor of vendor_boot.img in vbmeta.img, so if you need to modify vendor_boot.img, you need to update vbmeta.img together.
+**Basic Unpacking:**
+```ini
+ACTION=unpack
+INPUT_IMAGE=system.img
+EXTRACT_DIR=extracted_system
+```
 
+**Super Image Unpacking:**
+```ini
+ACTION=super_unpack
+INPUT_IMAGE=super.img
+PROJECT_NAME=my_super_project
+```
+
+**Basic Repacking:**
+```ini
+ACTION=repack
+SOURCE_DIR=EXTRACTED_IMAGES/extracted_system
+OUTPUT_IMAGE=REPACKED_IMAGES/system_new.img
+FILESYSTEM=erofs
+COMPRESSION_MODE=lz4hc
+COMPRESSION_LEVEL=9
+CREATE_SPARSE_IMAGE=true
+```
+
+**Super Image Repacking:**
+```ini
+ACTION=super_repack
+PROJECT_NAME=my_super_project
+OUTPUT_IMAGE=REPACKED_IMAGES/super_new.img
+```
+
+## 📁 Project Structure
+
+```
+Android_Image_Tools/
+├── android_image_tools.sh    # Main script
+├── .bin/                     # Helper scripts
+├── INPUT_IMAGES/             # Place .img files here
+├── EXTRACTED_IMAGES/         # Unpacked directories
+├── REPACKED_IMAGES/          # Output images
+├── SUPER_TOOLS/              # Super image projects
+├── CONFIGS/                  # Generated configs
+└── .tmp/                     # Temp files (auto-cleaned)
+```
+
+## 🛠️ Troubleshooting
+
+### Common Issues
+
+**Permission denied**
+- Run with `sudo`
+- Check file ownership
+
+**SELinux contexts lost**
+- Only occurs on SELinux-enforcing distros when using FUSE mounting
+- Normal on Fedora (contexts preserved with kernel mounts)
+- Use kernel mounts when possible
+
+**Sparse conversion fails**
+- Check `simg2img`/`img2simg` installation
+- Verify disk space
+
+**Super operations fail**
+- Verify `super.img` integrity
+
+### Debug Mode
+
+Enable detailed logging for complex operations:
 ```bash
-rm *.img
-cp <your_vendor_boot_image> vendor_boot.img
-cp <your_vbmeta_image> vbmeta.img
-./gradlew unpack
-./gradlew pack
-./gradlew flash
+# Add to super config
+ENABLE_VERBOSE_LOGS=true
 ```
 
-Please note that to use 'gradle flash', your host machine must be connectted to your DUT with adb, and you already 'adb root'.
+## 🤝 Contributing
 
-</details>
+1. Fork the repository
+2. Test on Ubuntu + Fedora systems
+3. Submit pull requests
 
-<details>
-  <summary>How to edit device tree blob(dtb) inside vendor_boot.img</summary>
+## 📄 License
 
-If you want to edit the device-tree blob in place:
+MIT License - see [LICENSE](LICENSE) file.
 
-```bash
-cp <your_vendor_boot_image> vendor_boot.img
-cp <your_vbmeta_image> vbmeta.img
-./gradlew unpack
-==> now you can edit build/unzip_boot/dtb.dts directly
-./gradlew pack
-```
+## 🙏 Credits
 
-During unpack stage, dtb will be dumped to file `build/unzip_boot/dtb`, dts will be decompiled to `build/unzip_boot/dtb.dts`.
-You can edit `dtb.dts` directly, and it will be compiled to dtb duing repack stage.
+Inspired by CRB Kitchen for Windows. Thanks to the Android modding community!
 
-If you just want to replace the dtb with the one that is compiled outside this tool, please
+---
 
-```bash
-cp <your_vendor_boot_image> vendor_boot.img
-cp <your_vbmeta_image> vbmeta.img
-./gradlew unpack
-rm build/unzip_boot/dtb.dts
-cp <your_dtb> build/unzip_boot/dtb
-./gradlew pack
-```
-
-</details>
-
-<details>
-
-  <summary>How to pull device tree blob(dtb) from a rooted device</summary>
-
-If you have a rooted device and want to pull /proc/device-tree
-```bash
-touch fake.dtb
-./gradlew pull
-```
-This tool will copy `dtc` to the target device via `adb`, and dump the dtb and dts file. Eventually you should get something like this
-```
-+--------+------------------------------+
-|  What  |            Where             |
-+--------+------------------------------+
-| source | /proc/device-tree            |
-+--------+------------------------------+
-| DTB    | panther.dtb                  |
-+--------+------------------------------+
-| DTS    | build/unzip_boot/panther.dts |
-+--------+------------------------------+
-
-```
-
-</details>
-
-<details>
-
-  <summary>How to work edit device tree blob(dtb) file</summary>
-
-If you have a dtb file and want to edit its content
-```bash
-cp <your_dtb_file> .
-./gradlew unpack
-```
-This tool will decompile it and put the decompiled source to build/unzip_boot.
-
-```
-                        Unpack Summary of panther.dtb
-+------+------------------------------+
-| What |            Where             |
-+------+------------------------------+
-| DTB  | panther.dtb                  |
-+------+------------------------------+
-| DTS  | build/unzip_boot/panther.dts |
-+------+------------------------------+
-```
-
-</details>
-
-<details>
-  <summary>working with system.img</summary>
-
-```bash
-cp <your_system_image> system.img
-./gradlew unpack
-```
-You get `system.img.unsparse`, that's a plain ext4 filesystem data.
-
-</details>
-
-<details>
-  <summary>How to disable AVB verification</summary>
-
-The idea is to set flag=2 in main vbmeta.
-
-```bash
-rm *.img
-cp <your_vbmeta_image> vbmeta.img
-./gradlew unpack
-vim -u NONE -N build/unzip_boot/vbmeta.avb.json  -c ":19s/0/2/g" -c ":wq"
-./gradlew pack
-```
-Then flash vbmeta.img.signed to your device.
-
-</details>
-
-<details>
-
-  <summary>How to merge init_boot.img into boot.img</summary>
-
-* unpack init_boot.img and copy out "build/unzip_boot/root".
-* clear workspace by `gradle clear`, then unpack boot.img
-* copy back the "build/unzip_boot/root"
-* edit build/unzip_boot/boot.json
-- change `ramdisk.size` to 1
-- change `ramdisk.file` from "build/unzip_boot/ramdisk.img" to "build/unzip_boot/ramdisk.img.lz4"
-
-</details>
-
-<details>
-
-  <summary>work with payload.bin</summary>
-
-- extract everything
-
-Usage:
-```
-    gradle unpack
-```
-
-- extract only 1 specified partition
-Usage:
-```
-    gradle unpack -Dpart=<part_name>
-```
-Example:
-```
-    gradle unpack -Dpart=boot
-    gradle unpack -Dpart=system
-```
-
-Note:
-    "build/payload/" will be deleted before each "unpack" task
-
-</details>
-
-
-<details>
-
-  <summary>work with apex images</summary>
-
-AOSP already has tools like apexer, deapexer, sign_apex.py, these should suffice the needs on .apex and .capex.
-Refer to Issue https://github.com/cfig/Android_boot_image_editor/issues/120
-
-- For those who may be interested in apex generation flow, there is a graph here
-![image](doc/apexer_generate_flow.png)
-
-</details>
-
-<details>
-  <summary>How to work with vendor_dlkm.img</summary>
-
-```bash
-cp <your_vendor_dlkm.img> vendor_dlkm.img
-cp <your_vbmeta_image> vbmeta.img
-./gradlew unpack
-# replace your .ko
-./gradlew pack
-```
-Then flash `vbmeta.img.signed` and `vendor_dlkm.img.signed` to the device.
-
-</details>
-
-## boot.img layout
-Read [boot layout](doc/layout.md) of Android boot.img and vendor\_boot.img.
-Read [misc layout](doc/misc_image_layout.md) of misc\.img
-
-## References and Acknowledgement
-<details>
-  <summary>more ...</summary>
-
-Android version list https://source.android.com/source/build-numbers.html<br/>
-Android build-numbers https://source.android.com/setup/start/build-numbers
-
-cpio & fs\_config<br>
-https://android.googlesource.com/platform/system/core<br/>
-https://www.kernel.org/doc/Documentation/early-userspace/buffer-format.txt<br/>
-AVB<br/>
-https://android.googlesource.com/platform/external/avb/<br/>
-boot\_signer<br/>
-https://android.googlesource.com/platform/system/extras<br/>
-mkbootimg<br/>
-https://android.googlesource.com/platform/system/tools/mkbootimg/+/refs/heads/master/<br/>
-boot header definition<br/>
-https://android.googlesource.com/platform/system/tools/mkbootimg/+/refs/heads/master/include/bootimg/bootimg.h<br/>
-kernel info extractor<br/>
-https://android.googlesource.com/platform/build/+/refs/heads/master/tools/extract_kernel.py<br/>
-mkdtboimg<br/>
-https://android.googlesource.com/platform/system/libufdt/<br/>
-libsparse<br/>
-https://android.googlesource.com/platform/system/core/+/refs/heads/master/libsparse/<br/>
-Android Nexus/Pixle factory images<br/>
-https://developers.google.cn/android/images<br/>
-
-</details>
-
+**Ready to mod?** 🚀 Run the tool and explore the menu - everything is designed to be intuitive!
