@@ -56,12 +56,12 @@ export GKI_KERNEL_BUILD_OPTIONS="
     ABI_DEFINITION= \
     BUILD_BOOT_IMG=1 \
     SKIP_VENDOR_BOOT=1 \
-    MKBOOTIMG_PATH=${ANDROID_BUILD_TOP}/kernel_platform/mkbootimg/mkbootimg.py \
+    MKBOOTIMG_PATH=${ANDROID_BUILD_TOP}/kernel_platform/tools/mkbootimg/mkbootimg.py \
     KERNEL_BINARY=Image.gz \
     BOOT_IMAGE_HEADER_VERSION=4 \
     AVB_SIGN_BOOT_IMG=1 \
     AVB_BOOT_PARTITION_SIZE=100663296 \
-    AVB_BOOT_KEY=${ANDROID_BUILD_TOP}/kernel_platform/mkbootimg/gki/testdata/testkey_rsa4096.pem \
+    AVB_BOOT_KEY=${ANDROID_BUILD_TOP}/kernel_platform/tools/mkbootimg/gki/testdata/testkey_rsa4096.pem \
     AVB_BOOT_ALGORITHM=SHA256_RSA4096 \
     AVB_BOOT_PARTITION_NAME=boot  
 "
