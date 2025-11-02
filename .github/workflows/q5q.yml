@@ -1,0 +1,28 @@
+name: Kernel Build (Fold5) 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+
+    steps:
+    - name: 1. import kernel source
+      uses: actions/checkout@v4   
+      
+    - name: 2. install package
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y  
+
+    - name: 3. setting permission
+      run: chmod +x build.sh
+
+    - name: 4. kernel build
+      run: |   
+        ./build.sh
+        
+    - name: 5. Upload Artifacts Kernel File
+      uses: actions/upload-artifact@v4
+      with:
+        name: "GoRhanHee_Fold5_KernelSU-Next_SuSFS"
+        path: |
+          gorhanhee/boot.img
