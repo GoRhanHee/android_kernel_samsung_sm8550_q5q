@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Import submodules
+git submodule init && git submodule update --remote
+
 #1. target config
 BUILD_TARGET=q5q_kor_singlex
 export MODEL=$(echo $BUILD_TARGET | cut -d'_' -f1)
@@ -7,8 +10,7 @@ export PROJECT_NAME=${MODEL}
 export REGION=$(echo $BUILD_TARGET | cut -d'_' -f2)
 export CARRIER=$(echo $BUILD_TARGET | cut -d'_' -f3)
 export TARGET_BUILD_VARIANT=user
-		
-		
+				
 #2. sm8550 common config
 CHIPSET_NAME=kalama
 
@@ -70,6 +72,15 @@ export MKBOOTIMG_EXTRA_ARGS="
     --os_patch_level 2025-08-00 \
     --pagesize 4096 \
 "
+# Import toolchain
+TOOLCHAIN_URL="https://github.com/GoRhanHee/samsung_sm8550_toolchain/releases/download/toolchain/toolchain.tar.xz"
+TOOLCHAIN_FILE=$(basename "$TOOLCHAIN_URL")
+if [ ! -f "$TOOLCHAIN_FILE" ]; then
+    wget -q --show-progress -O "$TOOLCHAIN_FILE" "$TOOLCHAIN_URL"
+fi
+tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/prebuilts && rm "$TOOLCHAIN_FILE"
+
+cd ${ANDROID_BUILD_TOP}
 
 #3. build kernel
 ( env ${GKI_KERNEL_BUILD_OPTIONS} ${ANDROID_BUILD_TOP}/kernel_platform/build/android/prepare_vendor.sh sec ${TARGET_PRODUCT} || exit 1) 
