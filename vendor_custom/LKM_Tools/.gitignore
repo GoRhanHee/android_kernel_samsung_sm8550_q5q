@@ -1,4 +1,2 @@
 *.ko
-modules.*
 *.log
-
