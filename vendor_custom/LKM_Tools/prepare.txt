@@ -1,0 +1,29 @@
+./02.prepare_vendor_boot_modules.sh \
+  /home/test1/zfold5/Kernel/LKM_Tools/vendor_boot/modules_list.txt \
+  /home/test1/zfold5/Kernel/out/msm-kalama-kalama-gki/dist \
+  /home/test1/zfold5/Kernel/LKM_Tools/vendor_boot/modules.load \
+  /home/test1/zfold5/Kernel/out/msm-kalama-kalama-gki/dist/System.map \
+  /home/test1/zfold5/Kernel/kernel_platform/prebuilts/clang/host/linux-x86/clang-r450784e/bin/llvm-strip \
+  /home/test1/zfold5/Kernel/LKM_Tools/vendor_boot/vendor_boot_modules
+
+
+./03.prepare_vendor_dlkm.sh \
+  /home/test1/zfold5/Kernel/LKM_Tools/vendor_dlkm/modules_list.txt \
+  /home/test1/zfold5/Kernel/out/msm-kalama-kalama-gki/dist \
+  /home/test1/zfold5/Kernel/LKM_Tools/vendor_dlkm/modules.load \
+  /home/test1/zfold5/Kernel/out/msm-kalama-kalama-gki/dist/System.map \
+  /home/test1/zfold5/Kernel/kernel_platform/prebuilts/clang/host/linux-x86/clang-r450784e/bin/llvm-strip \
+  /home/test1/zfold5/Kernel/LKM_Tools/vendor_dlkm/vendor_dlkm_modules \
+  "" \
+  ""
+
+
+./lkm_installer \
+  ./vendor_boot/modules_list.txt \
+  /home/test1/zfold5/Kernel/out/msm-kalama-kalama-gki/dist \
+  ./vendor_boot/modules.load \
+  /home/test1/zfold5/Kernel/out/msm-kalama-kalama-gki/dist/System.map \
+  /home/test1/zfold5/Kernel/kernel_platform/prebuilts/clang/host/linux-x86/clang-r450784e/bin/llvm-strip \
+  ./vendor_boot/vendor_boot_modules  
+
+sudo mount vendor_dlkm.img -o loop -t erofs build/unzip_boot/mount      
