@@ -1,4 +1,4 @@
-name: Kernel Build (Fold5) 
+name: All Build (Fold5) 
 
 on:
   workflow_dispatch:
@@ -8,6 +8,12 @@ jobs:
     runs-on: ubuntu-latest 
 
     steps:
+    - name: 0. Free up workflow space
+      run: |
+        curl -L -o util_free_space.sh https://raw.githubusercontent.com/apache/arrow/main/ci/scripts/util_free_space.sh
+        chmod +x util_free_space.sh
+        ./util_free_space.sh
+
     - name: 1. import kernel source
       uses: actions/checkout@v4   
       
@@ -17,11 +23,11 @@ jobs:
         sudo apt-get install -y build-essential bc bison flex libssl-dev make libncurses5-dev git curl clang lld libelf-dev
 
     - name: 3. setting permission
-      run: chmod +x build.sh
+      run: chmod +x build_all.sh
 
     - name: 4. kernel build
       run: |   
-        ./build.sh
+        ./build_all.sh
         
     - name: 5. Upload Artifacts Kernel File
       uses: actions/upload-artifact@v4

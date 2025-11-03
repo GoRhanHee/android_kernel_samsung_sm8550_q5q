@@ -1,0 +1,50 @@
+name: Only Module Build (Fold5) 
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: 'Kernel Output Run ID'
+        required: true
+        type: string
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+
+    steps:
+    - name: 0. Free up workflow space
+      run: |
+        curl -L -o util_free_space.sh https://raw.githubusercontent.com/apache/arrow/main/ci/scripts/util_free_space.sh
+        chmod +x util_free_space.sh
+        ./util_free_space.sh
+
+    - name: 1. import kernel source
+      uses: actions/checkout@v4   
+
+    - name: 2. Download Kernel Output
+      uses: actions/download-artifact@v4 
+      with:
+          name: Fold5_Kernel_Source_OUTPUT
+          path: ./out/msm-kalama-kalama-gki/dist
+          run-id: ${{ github.event.inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 3. install package
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential bc bison flex libssl-dev make libncurses5-dev git curl clang lld libelf-dev
+
+    - name: 4. setting permission
+      run: chmod +x build_module.sh
+
+    - name: 5. module build
+      run: |   
+        ./build_module.sh
+        
+    - name: 6. Upload Artifacts Kernel File
+      uses: actions/upload-artifact@v4
+      with:
+        name: "GoRhanHee_Fold5_KernelSU-Next_SuSFS"
+        path: |
+          gorhanhee/*.tar
+          gorhanhee/vendor_dlkm.img

@@ -82,19 +82,5 @@ tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/preb
 
 cd ${ANDROID_BUILD_TOP}
 
-# GoRhanHee
-mkdir gorhanhee
-export GORHANHEE=${ANDROID_BUILD_TOP}/gorhanhee
-
 #3. build kernel
-( env ${GKI_KERNEL_BUILD_OPTIONS} ${ANDROID_BUILD_TOP}/kernel_platform/build/android/prepare_vendor.sh sec ${TARGET_PRODUCT} || exit 1) && \
-        cp "${ANDROID_BUILD_TOP}/out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img" "${GORHANHEE}/"
-
-#4. build vendor_boot & vendor_dlkm
-cd vendor_custom
-./vendor_boot.sh || exit 1
-./vendor_dlkm.sh || exit 1
-
-#5. Make Odin flashable .tar file
-cd ${GORHANHEE} 
-tar -cvf Galaxy_Fold5_SuSFS.tar boot.img vendor_boot.img
+( env ${GKI_KERNEL_BUILD_OPTIONS} ${ANDROID_BUILD_TOP}/kernel_platform/build/android/prepare_vendor.sh sec ${TARGET_PRODUCT} || exit 1)
