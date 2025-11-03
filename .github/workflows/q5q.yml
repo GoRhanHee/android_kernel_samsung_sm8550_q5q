@@ -28,4 +28,5 @@ jobs:
       with:
         name: "GoRhanHee_Fold5_KernelSU-Next_SuSFS"
         path: |
-          gorhanhee/boot.img
+          gorhanhee/*.tar
+          gorhanhee/vendor_dlkm.img

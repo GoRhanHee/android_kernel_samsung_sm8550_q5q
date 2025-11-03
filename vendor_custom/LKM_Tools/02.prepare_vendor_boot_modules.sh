@@ -16,7 +16,7 @@
 #   5. Use OEM modules.load file without injecting new modules
 #   6. Create complete vendor_boot module set
 #
-#                              - ravindu644
+#                              - ravindu644 & GoRhanHee
 # ==============================================================================
 
 # Disable exit on error temporarily for better control

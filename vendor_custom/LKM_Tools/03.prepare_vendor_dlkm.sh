@@ -24,7 +24,7 @@
 #   8.  Append / insert, added / new modules to the new modules.load file,
 #       generating from the OEM's one.
 #
-#                              - ravindu644
+#                              - ravindu644 & GoRhanHee
 # ==============================================================================
 
 # Disable exit on error temporarily for better control
