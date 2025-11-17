@@ -1,0 +1,47 @@
+name: Kernel Build (Fold5) 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+
+    steps:
+    - name: Free up workflow space
+      run: |
+        curl -L -o util_free_space.sh https://raw.githubusercontent.com/apache/arrow/main/ci/scripts/util_free_space.sh
+        chmod +x util_free_space.sh
+        ./util_free_space.sh
+
+    - name: Import Kernel Source
+      uses: actions/checkout@v4   
+      
+    - name: Install Required Package
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential bc bison flex libssl-dev make libncurses5-dev git curl clang lld libelf-dev erofs-utils
+
+    - name: Setting Scripts Permission
+      run: chmod +x fold5.sh
+      run: chmod +x build.sh      
+
+    - name: Kernel Build
+      run: |   
+        ./fold5.sh
+        
+    - name: Upload Artifacts Kernel OUTPUT File
+      uses: actions/upload-artifact@v4
+      with:
+        name: "Fold5_Kernel_Source_OUTPUT"
+        path: |
+          ./out/msm-kalama-kalama-gki/dist/**
+
+    - name: Upload Artifacts Flashable File
+      uses: actions/upload-artifact@v4
+      with:
+        name: "Fold5_Kernel_File"
+        path: |
+          ./Galaxy_Fold5_KSUN.tar
+          ./boot.img
+          ./recovery.img
