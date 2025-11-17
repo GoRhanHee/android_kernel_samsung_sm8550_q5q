@@ -126,6 +126,7 @@ else
     fi
     tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/prebuilts && rm "$TOOLCHAIN_FILE"
     info "Complete Download."
+fi
 
 info "           Success Import Toolchain"
 info "================================================"
