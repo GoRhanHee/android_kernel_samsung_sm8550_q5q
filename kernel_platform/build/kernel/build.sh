@@ -660,7 +660,7 @@ if [ -n "${SKIP_IF_VERSION_MATCHES}" ]; then
   fi
 fi
 
-rm -rf ${DIST_DIR}
+# rm -rf ${DIST_DIR}
 mkdir -p ${OUT_DIR} ${DIST_DIR}
 
 if [ -n "${GKI_PREBUILTS_DIR}" ]; then
