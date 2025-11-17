@@ -25,6 +25,7 @@ jobs:
     - name: Setting Scripts Permission
       run: |    
         chmod +x fold5.sh
+        chmod +x env.sh
         chmod +x build.sh      
 
     - name: Kernel Build
