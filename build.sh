@@ -34,18 +34,18 @@
 # Setting Color Font
 source "./env.sh"
 
-info " "
-info "================================================"
 info "              Compiling Scripts"
 info "================================================"
 
 # Import submodules
+set -x
 git submodule init && git submodule update --remote
-
+set +x
 info "           Success Import Submodule"
 info "================================================"
 
 # OEM Setting
+set -x
 BUILD_TARGET=q5q_kor_singlex
 export MODEL=$(echo $BUILD_TARGET | cut -d'_' -f1)
 export PROJECT_NAME=${MODEL}
@@ -84,10 +84,12 @@ export KBUILD_EXT_MODULES="../vendor/qcom/opensource/mm-drivers/msm_ext_display 
   ../vendor/qcom/opensource/camera-kernel \
   "
 
+set +x
 info "             Success OEM Setting"
 info "================================================"
 
 # Build Setting
+set -x
 export GKI_KERNEL_BUILD_OPTIONS="
     SKIP_MRPROPER=1 \
     LTO=thin \
@@ -114,6 +116,7 @@ export MKBOOTIMG_EXTRA_ARGS="
     --pagesize 4096 \
 "
 
+set +x
 info "            Success Build Setting"
 info "================================================"
 
