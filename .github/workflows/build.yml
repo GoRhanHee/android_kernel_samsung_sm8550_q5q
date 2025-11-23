@@ -37,7 +37,7 @@ jobs:
       with:
         name: "Fold5_Kernel_Source_OUTPUT"
         path: |
-          ./out/msm-kalama-kalama-gki/dist/**
+          ./out/**
 
     - name: Upload Artifacts Flashable File
       uses: actions/upload-artifact@v4
@@ -47,3 +47,4 @@ jobs:
           ./Galaxy_Fold5_KSUN.tar
           ./boot.img
           ./recovery.img
+          ./out/msm-kalama-kalama-gki/dist/Image
