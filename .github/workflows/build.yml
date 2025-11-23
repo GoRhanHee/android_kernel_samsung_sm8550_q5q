@@ -31,13 +31,17 @@ jobs:
     - name: Kernel Build
       run: |   
         ./fold5.sh
-        
+
+    - name: Compress OUTPUT folder
+      run: |
+        echo "Zipping out directory..."
+        zip -r -q Fold5_Kernel_Source_OUTPUT.zip ./out
+
     - name: Upload Artifacts Kernel OUTPUT File
       uses: actions/upload-artifact@v4
       with:
         name: "Fold5_Kernel_Source_OUTPUT"
-        path: |
-          ./out/**
+        path: Fold5_Kernel_Source_OUTPUT.zip
 
     - name: Upload Artifacts Flashable File
       uses: actions/upload-artifact@v4
