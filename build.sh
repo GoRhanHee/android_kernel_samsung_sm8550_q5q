@@ -44,6 +44,9 @@ set +x
 info "           Success Import Submodule"
 info "================================================"
 
+# DIR Setting
+SCRIPT_DIR="$(dirname $(readlink -fq $0))"
+
 # OEM Setting
 set -x
 BUILD_TARGET=q5q_kor_singlex
@@ -139,5 +142,13 @@ fi
 info "           Success Import Toolchain"
 info "================================================"
 
-# Build kernel
+# Build boot.img (kernel)
 ( env ${GKI_KERNEL_BUILD_OPTIONS} ${ANDROID_BUILD_TOP}/kernel_platform/build/android/prepare_vendor.sh sec ${TARGET_PRODUCT} || exit 1)
+
+# Build vendor_boot.img
+    SCRIPT_DIR="${SCRIPT_DIR}" \
+        "${SCRIPT_DIR}/prebuilts/build_vendor_boot.sh" || exit 1
+
+# Build vendor_dlkm.img
+    SCRIPT_DIR="${SCRIPT_DIR}" \
+        "${SCRIPT_DIR}/prebuilts/build_vendor_dlkm.sh" || exit 1
