@@ -1,0 +1,109 @@
+{
+  "info" : {
+    "input" : "/home/test1/zfold5/vendor_boot_unpack/vendor_boot.img",
+    "role" : "vendor_boot.img",
+    "json" : "vendor_boot.json",
+    "headerVersion" : 4,
+    "product" : "SRPWB23A005",
+    "headerSize" : 2128,
+    "pageSize" : 4096,
+    "cmdline" : "video=vfb:640x400,bpp=32,memsize=3072000 printk.devkmsg=on firmware_class.path=/vendor/firmware_mnt/image bootconfig loop.max_part=7",
+    "tagsLoadAddr" : 31457280,
+    "kernelLoadAddr" : 32768,
+    "imageSize" : 100663296
+  },
+  "ramdisk" : {
+    "file" : "build/unzip_boot/ramdisk.img.lz4",
+    "position" : 4096,
+    "size" : 14833326,
+    "loadAddr" : 33554432,
+    "xzFlags" : null
+  },
+  "dtb" : {
+    "file" : "build/unzip_boot/dtb",
+    "position" : 14839808,
+    "size" : 1803659,
+    "loadAddr" : 32505856,
+    "dtbList" : [ {
+      "seqNo" : 0,
+      "offset" : 0,
+      "header" : {
+        "magic" : 3490578157,
+        "totalsize" : 452787,
+        "offDtStruct" : 56,
+        "offDtStrings" : 416640,
+        "offMemRsvmap" : 40,
+        "version" : 17,
+        "lastCompVersion" : 16,
+        "bootCpuidPhys" : 0,
+        "sizeDtStrings" : 36147,
+        "sizeDtStruct" : 416584
+      }
+    }, {
+      "seqNo" : 1,
+      "offset" : 452787,
+      "header" : {
+        "magic" : 3490578157,
+        "totalsize" : 453268,
+        "offDtStruct" : 56,
+        "offDtStrings" : 416916,
+        "offMemRsvmap" : 40,
+        "version" : 17,
+        "lastCompVersion" : 16,
+        "bootCpuidPhys" : 0,
+        "sizeDtStrings" : 36352,
+        "sizeDtStruct" : 416860
+      }
+    }, {
+      "seqNo" : 2,
+      "offset" : 906055,
+      "header" : {
+        "magic" : 3490578157,
+        "totalsize" : 448924,
+        "offDtStruct" : 56,
+        "offDtStrings" : 414104,
+        "offMemRsvmap" : 40,
+        "version" : 17,
+        "lastCompVersion" : 16,
+        "bootCpuidPhys" : 0,
+        "sizeDtStrings" : 34820,
+        "sizeDtStruct" : 414048
+      }
+    }, {
+      "seqNo" : 3,
+      "offset" : 1354979,
+      "header" : {
+        "magic" : 3490578157,
+        "totalsize" : 448680,
+        "offDtStruct" : 56,
+        "offDtStrings" : 413860,
+        "offMemRsvmap" : 40,
+        "version" : 17,
+        "lastCompVersion" : 16,
+        "bootCpuidPhys" : 0,
+        "sizeDtStrings" : 34820,
+        "sizeDtStruct" : 413804
+      }
+    } ]
+  },
+  "ramdisk_table" : {
+    "size" : 108,
+    "eachEntrySize" : 108,
+    "position" : 16646144,
+    "ramdidks" : [ {
+      "size" : 14833326,
+      "offset" : 0,
+      "type" : "PLATFORM",
+      "name" : "",
+      "boardId" : "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+      "boardIdStr" : "",
+      "file" : "build/unzip_boot/ramdisk.1.lz4"
+    } ]
+  },
+  "bootconfig" : {
+    "file" : "build/unzip_boot/bootconfig",
+    "position" : 16650240,
+    "size" : 85,
+    "loadAddr" : 0
+  }
+}
