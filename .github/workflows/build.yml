@@ -26,7 +26,9 @@ jobs:
       run: |    
         chmod +x fold5.sh
         chmod +x env.sh
-        chmod +x build.sh      
+        chmod +x build.sh
+        chmod +x build_kernel_GKI.sh
+        chmod -R +x prebuilts/             
 
     - name: Kernel Build
       run: |   
@@ -48,7 +50,9 @@ jobs:
       with:
         name: "Fold5_Kernel_File"
         path: |
-          ./Galaxy_Fold5_KSUN.tar
+          ./Galaxy_Fold5_KSUN.zip
           ./boot.img
           ./recovery.img
+          ./vendor_boot.img
+          ./vendor_dlkm.img
           ./out/msm-kalama-kalama-gki/dist/Image

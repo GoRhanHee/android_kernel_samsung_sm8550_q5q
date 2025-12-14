@@ -55,7 +55,9 @@ replace_config_values() {
 # 03. build vendor_dlkm.img
 build_vendor_dlkm() {
     cd "${AIT_DIR}" && \
-        sudo ./android_image_tools.sh --conf=${AIT_DIR}/CONFIGS/vendor_dlkm_repack.conf
+        sudo ./android_image_tools.sh --conf=${AIT_DIR}/CONFIGS/vendor_dlkm_repack.conf && \
+                mv "${AIT_DIR}/REPACKED_IMAGES/vendor_boot.img.signed" "${REPO_ROOT}/vendor_dlkm.img"
+                cd "${REPO_ROOT}"
 }
 
 # main execution
