@@ -49,14 +49,15 @@ package_modules() {
 # 02. replace the config values
 replace_config_values() {
     replace_config_value "${AIT_DIR}/CONFIGS/vendor_dlkm_repack.conf" "SOURCE_DIR" "${OUTPUT_DIR}" && \
-    replace_config_value "${AIT_DIR}/CONFIGS/vendor_dlkm_repack.conf" "OUTPUT_IMAGE" "${REPO_ROOT}/dist/vendor_dlkm.img"
+    replace_config_value "${AIT_DIR}/CONFIGS/vendor_dlkm_repack.conf" "OUTPUT_IMAGE" "${REPO_ROOT}/prebuilts/vendor_dlkm_unpack/REPACKED_IMAGES/vendor_dlkm_repacked.img"
 }
 
 # 03. build vendor_dlkm.img
 build_vendor_dlkm() {
     cd "${AIT_DIR}" && \
         sudo ./android_image_tools.sh --conf=${AIT_DIR}/CONFIGS/vendor_dlkm_repack.conf && \
-                cd "${REPO_ROOT}"
+        mv "${AIT_DIR}/REPACKED_IMAGES/vendor_dlkm_repacked.img" "${REPO_ROOT}/vendor_dlkm.img" && \
+        cd "${REPO_ROOT}"
 }
 
 # main execution

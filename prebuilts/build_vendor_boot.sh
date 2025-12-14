@@ -32,7 +32,7 @@ package_modules() {
 build_vendor_boot() {
     cd "${BOOT_EDITOR_DIR}" && \
         ./gradlew pack && \
-        mv vendor_boot.img.signed "${REPO_ROOT}/vendor_boot.img"
+        mv vendor_boot.img.signed "${REPO_ROOT}/vendor_boot.img" && \
         cd "${REPO_ROOT}"
 }
 
