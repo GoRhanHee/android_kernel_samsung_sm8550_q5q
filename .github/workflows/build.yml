@@ -37,17 +37,6 @@ jobs:
       run: |   
         ./fold5.sh
 
-    - name: Compress OUTPUT folder
-      run: |
-        echo "Zipping out directory..."
-        zip -r -q Fold5_Kernel_Source_OUTPUT.zip ./out
-
-    - name: Upload Artifacts Kernel OUTPUT File
-      uses: actions/upload-artifact@v4
-      with:
-        name: "Fold5_Kernel_Source_OUTPUT"
-        path: Fold5_Kernel_Source_OUTPUT.zip
-
     - name: Upload Artifacts Flashable File
       uses: actions/upload-artifact@v4
       with:
@@ -58,4 +47,4 @@ jobs:
           ./recovery.img
           ./vendor_boot.img
           ./vendor_dlkm.img
-          ./out/msm-kalama-kalama-gki/dist/Image
+          ./Image
