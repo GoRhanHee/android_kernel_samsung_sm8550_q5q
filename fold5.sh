@@ -39,6 +39,11 @@ info "================================================"
 # Cooking Flashable File
 set -x
 cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./
+cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot-gz.img ./
+cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot-lz4.img ./
+cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/Image ./
+cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/Image.gz ./
+cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/Image.lz4 ./
 tar -cvf Galaxy_Fold5_KSUN_ODIN.tar boot.img vendor_boot.img recovery.img
 
 zip Galaxy_Fold5_KSUN.zip Galaxy_Fold5_KSUN_ODIN.tar vendor_dlkm.img

@@ -145,6 +145,9 @@ info "================================================"
 # Build boot.img (kernel)
 ( env ${GKI_KERNEL_BUILD_OPTIONS} ${ANDROID_BUILD_TOP}/kernel_platform/build/android/prepare_vendor.sh sec ${TARGET_PRODUCT} || exit 1)
 
+# Copy prebuilts vendor modules to LKM Tools
+    cp -a ${ANDROID_BUILD_TOP}/prebuilts/prebuilts/* ${ANDROID_BUILD_TOP}/out/msm-kalama-kalama-gki/dist/
+
 # Build vendor_boot.img
     SCRIPT_DIR="${SCRIPT_DIR}" \
         "${SCRIPT_DIR}/prebuilts/build_vendor_boot.sh" || exit 1
