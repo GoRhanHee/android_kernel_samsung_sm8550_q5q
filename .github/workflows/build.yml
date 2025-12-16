@@ -42,7 +42,7 @@ jobs:
       with:
         name: "Fold5_Kernel_File"
         path: |
-          ./Galaxy_Fold5_GKI_Kernel.zip
+          ./Galaxy_Fold5_KSUN_Odin_Flashable.tar
           ./boot.img
           ./recovery.img
           ./vendor_boot.img
