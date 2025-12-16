@@ -1,4 +1,4 @@
-name: Kernel Build (Fold5) 
+name: Samsung GKI Kernel Build
 
 on:
   workflow_dispatch:
@@ -42,9 +42,8 @@ jobs:
       with:
         name: "Fold5_Kernel_File"
         path: |
-          ./Galaxy_Fold5_KSUN.zip
+          ./Galaxy_Fold5_GKI_Kernel.zip
           ./boot.img
           ./recovery.img
           ./vendor_boot.img
           ./vendor_dlkm.img
-          ./Image

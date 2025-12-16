@@ -39,10 +39,9 @@ info "================================================"
 # Cooking Flashable File
 set -x
 cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./
-cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/Image ./
 tar -cvf Galaxy_Fold5_KSUN_ODIN.tar boot.img vendor_boot.img recovery.img
 
-zip Galaxy_Fold5_KSUN.zip Galaxy_Fold5_KSUN_ODIN.tar vendor_dlkm.img
+zip Galaxy_Fold5_GKI_Kernel.zip Galaxy_Fold5_KSUN_ODIN.tar vendor_dlkm.img
 set +x
 
 info "        Complete Cooked Flashable File"
