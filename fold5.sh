@@ -27,7 +27,7 @@ info "               Success Compiling"
 info "================================================"
 
 # Download fastbootD patched recovery
-RECOVERY_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_q5q/releases/download/fastbootD/recovery.img"
+RECOVERY_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_q5q/releases/download/fastbootD_sixteen/recovery.img"
 RECOVERY_FILE=$(basename "$RECOVERY_URL")
 info "      Downloading FastbootD Patched Recovery"
 if [ ! -f "$RECOVERY_FILE" ]; then
