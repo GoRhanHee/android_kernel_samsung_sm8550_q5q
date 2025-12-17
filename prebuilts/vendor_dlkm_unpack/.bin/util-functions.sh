@@ -81,7 +81,8 @@ check_dependencies() {
         echo -e "\n${YELLOW}The 'erofs-utils' build tools are also missing.${RESET}"
     fi
 
-    read -rp "$(echo -e "\n${BLUE}Do you want to attempt automatic installation? (y/N): ${RESET}")" choice
+    echo -e "\n${BLUE}This scripts will install required tools..${RESET}"
+    choice="y"
 
     if [[ "$choice" =~ ^[Yy]$ ]]; then
         echo -e "\n${BLUE}Starting automatic installation...${RESET}"
