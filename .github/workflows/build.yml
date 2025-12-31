@@ -27,15 +27,13 @@ jobs:
 
     - name: Setting Scripts Permission
       run: |    
-        chmod +x fold5.sh
-        chmod +x env.sh
         chmod +x build.sh
         chmod +x build_kernel_GKI.sh
         chmod -R +x prebuilts/             
 
     - name: Kernel Build
       run: |   
-        ./fold5.sh
+        ./build.sh
 
     - name: Upload Artifacts Flashable File
       uses: actions/upload-artifact@v4
