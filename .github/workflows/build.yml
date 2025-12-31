@@ -27,22 +27,20 @@ jobs:
 
     - name: Setting Scripts Permission
       run: |    
-        chmod +x fold5.sh
-        chmod +x env.sh
         chmod +x build.sh
         chmod +x build_kernel_GKI.sh
         chmod -R +x prebuilts/             
 
     - name: Kernel Build
       run: |   
-        ./fold5.sh
+        ./build.sh
 
     - name: Upload Artifacts Flashable File
       uses: actions/upload-artifact@v4
       with:
         name: "Fold5_Kernel_File"
         path: |
-          ./Galaxy_Fold5_KSUN_Odin_Flashable.tar
+          ./Galaxy_Fold5_KernelSU_Next_A15.tar
           ./boot.img
           ./recovery.img
           ./vendor_boot.img

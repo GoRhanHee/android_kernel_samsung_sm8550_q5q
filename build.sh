@@ -134,4 +134,4 @@ fi
 
 # Cooking Flashable File
 cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./boot.img
-tar -cvf Galaxy_Fold5_KernelSU_Next_A16.tar boot.img vendor_boot.img recovery.img
+tar -cvf Galaxy_Fold5_KernelSU_Next_A15.tar boot.img vendor_boot.img recovery.img
