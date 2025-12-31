@@ -9,7 +9,7 @@
 #   Workflow:
 #   1. Fork this kernel repo in your repositories
 #   2. Go to the Actions > Select Kernel Build
-#   3. Run workflow > Branch: EYGB > Run Workflow
+#   3. Run workflow > Branch: sixteen > Run Workflow
 #   4. It takes about 30~50mins... (Scamsung Flagship GKI Kernel Source is very huge)
 #   5. Workflow Upload Cooked boot.img or Flashable Odin tar file(include FastbootD patched recovery)
 #   6. Download file and Flash Cooked file in Odin or FastbootD (If you first, You have to Use Odin)
@@ -21,7 +21,7 @@
 #   2. Custom Edit kernel source (If you dont know Kernel Knowledge, I recommend skip this step)
 #   3. Open the Terminal > Wrtie and Run This command
 #
-#                                          ./fold5.sh
+#                                          ./build.sh
 #
 #   4. It takes about 30~50mins... (Scamsung Flagship GKI Kernel Source is very huge)
 #                 ** Required at least 40~50GB in your local PC Storage **
@@ -31,24 +31,13 @@
 #                                 - GoRhanHee (Thank You for Ravindu)
 # ===============================================================================================================
 
-# Setting Color Font
-source "./env.sh"
-
-info "              Compiling Scripts"
-info "================================================"
-
 # Import submodules
-set -x
 git submodule init && git submodule update --remote
-set +x
-info "           Success Import Submodule"
-info "================================================"
 
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
 
 # OEM Setting
-set -x
 BUILD_TARGET=q5q_kor_singlex
 export MODEL=$(echo $BUILD_TARGET | cut -d'_' -f1)
 export PROJECT_NAME=${MODEL}
@@ -87,12 +76,7 @@ export KBUILD_EXT_MODULES="../vendor/qcom/opensource/mm-drivers/msm_ext_display 
   ../vendor/qcom/opensource/camera-kernel \
   "
 
-set +x
-info "             Success OEM Setting"
-info "================================================"
-
 # Build Setting
-set -x
 export GKI_KERNEL_BUILD_OPTIONS="
     SKIP_MRPROPER=1 \
     LTO=thin \
@@ -115,43 +99,39 @@ export GKI_KERNEL_BUILD_OPTIONS="
 # MKBOOTIMG Setting
 export MKBOOTIMG_EXTRA_ARGS="
     --os_version 13.0.0 \
-    --os_patch_level 2025-08-00 \
+    --os_patch_level 2025-11-00 \
     --pagesize 4096 \
 "
 
-set +x
-info "            Success Build Setting"
-info "================================================"
-
-# Import toolchain
+# Import Samsung toolchain
 TOOLCHAIN_URL="https://github.com/GoRhanHee/samsung_sm8550_toolchain/releases/download/toolchain/toolchain.tar.xz"
 TOOLCHAIN_FILE=$(basename "$TOOLCHAIN_URL")
-CHECK_DIR="toolchain"
-
-if [ -d "$CHECK_DIR" ]; then
-    info "Directory '$CHECK_DIR' already exists. Skipping downlaod toolchain."
-else
-    info "Directory '$CHECK_DIR' not found. Starting download toolchain..."
-    if [ ! -f "$TOOLCHAIN_FILE" ]; then
-        wget -q --show-progress --progress=dot:giga -O "$TOOLCHAIN_FILE" "$TOOLCHAIN_URL"
-    fi
-    tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/prebuilts && rm "$TOOLCHAIN_FILE"
-    info "Complete Download."
+if [ ! -f "$TOOLCHAIN_FILE" ]; then
+    wget -q --show-progress --progress=dot:giga -O "$TOOLCHAIN_FILE" "$TOOLCHAIN_URL"
 fi
+tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/prebuilts && rm "$TOOLCHAIN_FILE"
 
-info "           Success Import Toolchain"
-info "================================================"
-
-# Build boot.img (kernel)
+# Cooking Kernel Soruce & boot.img
 ( env ${GKI_KERNEL_BUILD_OPTIONS} ${ANDROID_BUILD_TOP}/kernel_platform/build/android/prepare_vendor.sh sec ${TARGET_PRODUCT} || exit 1)
 
-# Copy prebuilts vendor modules to LKM Tools
+# Copy prebuilts modules to LKM Tools
     cp -a ${ANDROID_BUILD_TOP}/prebuilts/prebuilts/* ${ANDROID_BUILD_TOP}/out/msm-kalama-kalama-gki/dist/
 
-# Build vendor_boot.img
+# Cooking vendor_boot.img
     SCRIPT_DIR="${SCRIPT_DIR}" \
         "${SCRIPT_DIR}/prebuilts/build_vendor_boot.sh" || exit 1
 
-# Build vendor_dlkm.img
+# Cooking vendor_dlkm.img
     SCRIPT_DIR="${SCRIPT_DIR}" \
         "${SCRIPT_DIR}/prebuilts/build_vendor_dlkm.sh" || exit 1
+
+# Download fastbootD patched recovery.img
+RECOVERY_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_q5q/releases/download/fastbootD/recovery.img"
+RECOVERY_FILE=$(basename "$RECOVERY_URL")
+if [ ! -f "$RECOVERY_FILE" ]; then
+    wget -q --show-progress --progress=dot:giga -O "$RECOVERY_FILE" "$RECOVERY_URL"
+fi
+
+# Cooking Flashable File
+cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./boot.img
+tar -cvf Galaxy_Fold5_KernelSU_Next_A16.tar boot.img vendor_boot.img recovery.img
