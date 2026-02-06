@@ -32,7 +32,7 @@
 # ===============================================================================================================
 
 # Import submodules
-git submodule init && git submodule update --remote
+git submodule update --init --recursive --remote --depth 1
 
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
