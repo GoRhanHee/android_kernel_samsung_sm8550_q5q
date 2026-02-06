@@ -43,8 +43,6 @@ jobs:
         path: |
           ./Galaxy_Fold5_KernelSU_Next_A16.tar
           ./boot.img
-          ./dtbo.img
-          ./init_boot.img
           ./recovery.img
           ./vendor_boot.img
           ./vendor_dlkm.img

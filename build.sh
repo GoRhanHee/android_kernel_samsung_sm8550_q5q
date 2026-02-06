@@ -132,8 +132,6 @@ if [ ! -f "$RECOVERY_FILE" ]; then
     wget -q --show-progress --progress=dot:giga -O "$RECOVERY_FILE" "$RECOVERY_URL"
 fi
 
-# Copying *.img & Cooking Flashable File
+# Cooking Flashable File
 cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./boot.img
-cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/dtbo.img ./dtbo.img
-cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/init_boot.img ./init_boot.img
-tar -cvf Galaxy_Fold5_KernelSU_Next_A16.tar boot.img dtbo.img init_boot.img vendor_boot.img recovery.img
+tar -cvf Galaxy_Fold5_KernelSU_Next_A16.tar boot.img vendor_boot.img recovery.img
