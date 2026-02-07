@@ -126,7 +126,7 @@ tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/preb
         "${SCRIPT_DIR}/prebuilts/build_vendor_dlkm.sh" || exit 1
 
 # Download fastbootD patched recovery.img
-RECOVERY_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_q5q/releases/download/fastbootD_sixteen/recovery.img"
+RECOVERY_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_q5q/releases/download/fastbootD_FZA1/recovery.img"
 RECOVERY_FILE=$(basename "$RECOVERY_URL")
 if [ ! -f "$RECOVERY_FILE" ]; then
     wget -q --show-progress --progress=dot:giga -O "$RECOVERY_FILE" "$RECOVERY_URL"
