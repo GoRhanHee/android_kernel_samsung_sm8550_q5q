@@ -1,6 +1,6 @@
 {
   "info" : {
-    "input" : "/home/test1/zfold5/vendor_boot_unpack/vendor_boot.img",
+    "input" : "/home/test1/zfold5/sixteen/prebuilts/vendor_boot_unpack/vendor_boot.img",
     "role" : "vendor_boot.img",
     "json" : "vendor_boot.json",
     "headerVersion" : 4,
@@ -15,7 +15,7 @@
   "ramdisk" : {
     "file" : "build/unzip_boot/ramdisk.img.lz4",
     "position" : 4096,
-    "size" : 14887047,
+    "size" : 14887230,
     "loadAddr" : 33554432,
     "xzFlags" : null
   },
@@ -91,7 +91,7 @@
     "eachEntrySize" : 108,
     "position" : 16699392,
     "ramdidks" : [ {
-      "size" : 14887047,
+      "size" : 14887230,
       "offset" : 0,
       "type" : "PLATFORM",
       "name" : "",

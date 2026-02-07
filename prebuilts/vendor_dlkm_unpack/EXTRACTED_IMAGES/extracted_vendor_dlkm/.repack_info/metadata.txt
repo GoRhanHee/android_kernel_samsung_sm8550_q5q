@@ -1,5 +1,5 @@
-UNPACK_TIME=1765977867
-SOURCE_IMAGE=/home/test1/zfold5/vendor_dlkm_unpack/INPUT_IMAGES/vendor_dlkm.img
+UNPACK_TIME=1770445876
+SOURCE_IMAGE=/home/test1/zfold5/sixteen/prebuilts/vendor_dlkm_unpack/INPUT_IMAGES/vendor_dlkm.img
 FILESYSTEM_TYPE=erofs
 MOUNT_METHOD=kernel
-ORIGINAL_UUID=8efd0310-fa6f-0358-9776-f12b0051e10a
+ORIGINAL_UUID=b4dbbbe4-7634-405c-8883-a7b4635391fa

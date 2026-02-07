@@ -1,4 +1,4 @@
-# File contexts extracted from /home/test1/zfold5/vendor_dlkm_unpack/INPUT_IMAGES/vendor_dlkm.img on Wed Dec 17 10:24:23 PM KST 2025
+# File contexts extracted from /home/test1/zfold5/sixteen/prebuilts/vendor_dlkm_unpack/INPUT_IMAGES/vendor_dlkm.img on Sat Feb  7 03:31:12 PM KST 2026
 / u:object_r:vendor_file:s0
 /etc u:object_r:vendor_configs_file:s0
 /etc/NOTICE.xml.gz u:object_r:vendor_configs_file:s0
