@@ -5,8 +5,15 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - mode: ksun           
+          - mode: twrp
+            
     steps:
     - name: Free up workflow space
       run: |
@@ -29,20 +36,34 @@ jobs:
     - name: Setting Scripts Permission
       run: |    
         chmod +x build.sh
-        chmod +x build_kernel_GKI.sh
         chmod -R +x prebuilts/             
 
     - name: Kernel Build
       run: |   
-        ./build.sh
+        ./build.sh ${{ matrix.mode }}
 
-    - name: Upload Artifacts Flashable File
+    - name: Upload KernelSU Artifacts
+      if: matrix.mode == "ksun"
       uses: actions/upload-artifact@v4
       with:
-        name: "Fold5_Kernel_File"
+        name: "Fold5_Kernel_File_KSUN"
         path: |
           ./Galaxy_Fold5_KernelSU_Next_A16.tar
           ./boot.img
           ./recovery.img
           ./vendor_boot.img
           ./vendor_dlkm.img
+        if-no-files-found: ignore
+        
+    - name: Upload TWRP Kernel Artifacts
+      if: matrix.mode == "twrp"
+      uses: actions/upload-artifact@v4
+      with:
+        name: "Fold5_Kernel_File_TWRP"
+        path: |
+          ./out/msm-kalama-kalama-gki/dist/Image          
+          ./vendor_boot.img
+          ./vendor_dlkm.img
+          ./prebuilts/vendor_boot_unpack/build/unzip_boot/root.1
+          ./prebuilts/vendor_dlkm_unpack/EXTRACTED_IMAGES/extracted_vendor_dlkm  
+        if-no-files-found: ignore  

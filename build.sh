@@ -31,11 +31,21 @@
 #                                 - GoRhanHee (Thank You for Ravindu)
 # ===============================================================================================================
 
+# Setting Build Mode
+export MODE=${1:-ksun}
+if [[ "$MODE" != "ksun" && "$MODE" != "twrp" ]]; then
+    echo "Build Command: ./build.sh {mode}"
+    exit 1
+fi
+(cd custom_defconfigs && cp ${MODE}_defconfig gorhanhee_defconfig)
+
 # Import common kernel
 git submodule update --init --remote --depth 1 kernel_platform/common
 
 # Import KernelSU-Next
+if [ "${MODE}" == "ksun" ]; then
 (cd kernel_platform/common && git submodule update --init --recursive KernelSU-Next)
+fi
 
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
@@ -129,12 +139,16 @@ tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/preb
         "${SCRIPT_DIR}/prebuilts/build_vendor_dlkm.sh" || exit 1
 
 # Download fastbootD patched recovery.img
-RECOVERY_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_q5q/releases/download/fastbootD_FZA1/recovery.img"
-RECOVERY_FILE=$(basename "$RECOVERY_URL")
-if [ ! -f "$RECOVERY_FILE" ]; then
-    wget -q --show-progress --progress=dot:giga -O "$RECOVERY_FILE" "$RECOVERY_URL"
+if [ "${MODE}" != "twrp" ]; then
+    RECOVERY_URL="https://github.com/GoRhanHee/android_kernel_samsung_sm8550_q5q/releases/download/fastbootD_FZA1/recovery.img"
+    RECOVERY_FILE=$(basename "$RECOVERY_URL")
+    if [ ! -f "$RECOVERY_FILE" ]; then
+        wget -q --show-progress --progress=dot:giga -O "$RECOVERY_FILE" "$RECOVERY_URL"
+    fi
 fi
 
 # Cooking Flashable File
-cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./boot.img
-tar -cvf Galaxy_Fold5_KernelSU_Next_A16.tar boot.img vendor_boot.img recovery.img
+if [ "${MODE}" != "twrp" ]; then
+    cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./boot.img
+    tar -cvf Galaxy_Fold5_KernelSU_Next_A16.tar boot.img vendor_boot.img recovery.img
+fi    
