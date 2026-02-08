@@ -35,7 +35,7 @@
 git submodule update --init --remote --depth 1 kernel_platform/common
 
 # Import KernelSU-Next
-git submodule update --init --recursive kernel_platform/common/KernelSU-Next
+(cd kernel_platform/common && git submodule update --init --recursive KernelSU-Next)
 
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
