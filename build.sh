@@ -44,7 +44,7 @@ git submodule update --init --remote --depth 1 kernel_platform/common
 
 # Import KernelSU-Next
 if [ "${MODE}" == "ksun" ]; then
-(cd kernel_platform/common && git submodule update --init --recursive KernelSU-Next)
+(cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -)
 fi
 
 # DIR Setting
