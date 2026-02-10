@@ -1,0 +1,10 @@
+ui_print(" ");
+ui_print("Installing GoRhanHee Kernel (Z Fold5)...");
+ui_print(" ");
+
+package_extract_file("files/boot.img", "/dev/block/by-name/boot");
+package_extract_file("files/vendor_boot.img", "/dev/block/by-name/vendor_boot");
+package_extract_file("files/vendor_dlkm.img", "/dev/block/mapper/vendor_dlkm");
+
+ui_print("Installation done!");
+ui_print(" ");

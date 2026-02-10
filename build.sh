@@ -151,4 +151,10 @@ fi
 if [ "${MODE}" != "twrp" ]; then
     cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./boot.img
     tar -cvf Galaxy_Fold5_KernelSU_Next_A16.tar boot.img vendor_boot.img recovery.img
+    rm -f recovery.img
+    mkdir -p prebuilts/zip/files
+    cp ${ANDROID_BUILD_TOP}/*.img ${ANDROID_BUILD_TOP}/prebuilts/zip/files/
+    cp -r ${ANDROID_BUILD_TOP}/prebuilts/META-INF ${ANDROID_BUILD_TOP}/prebuilts/zip/
+    cd ${ANDROID_BUILD_TOP}/prebuilts/zip
+    zip -r Fold5_Kernel_File_KSUN.zip META-INF files
 fi    

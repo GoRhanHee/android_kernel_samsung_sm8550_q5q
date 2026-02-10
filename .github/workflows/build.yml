@@ -48,11 +48,9 @@ jobs:
       with:
         name: "Fold5_Kernel_File_KSUN"
         path: |
-          ./Galaxy_Fold5_KernelSU_Next_A16.tar
-          ./boot.img
-          ./recovery.img
-          ./vendor_boot.img
+          ./Galaxy_Fold5_KernelSU_Next_A16.tar          
           ./vendor_dlkm.img
+          ./prebuilts/zip/Fold5_Kernel_File_KSUN.zip
         if-no-files-found: ignore
 
     - name: Upload TWRP Kernel Artifacts
@@ -65,5 +63,4 @@ jobs:
           ./vendor_boot.img
           ./vendor_dlkm.img
           ./prebuilts/vendor_boot_unpack/build/unzip_boot/root.1
-          ./prebuilts/vendor_dlkm_unpack/EXTRACTED_IMAGES/extracted_vendor_dlkm  
         if-no-files-found: ignore  
