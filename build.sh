@@ -33,7 +33,7 @@
 
 # Setting Build Mode
 export MODE=${1:-ksun}
-if [[ "$MODE" != "ksun" && "$MODE" != "twrp" ]]; then
+if [[ "$MODE" != "ksun" && "$MODE" != "twrp" && "$MODE" != "susfs" ]]; then
     echo "Build Command: ./build.sh {mode}"
     exit 1
 fi
@@ -44,7 +44,10 @@ git submodule update --init --remote --depth 1 kernel_platform/common
 
 # Import KernelSU-Next
 if [ "${MODE}" == "ksun" ]; then
-(cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -)
+    (cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -)
+elif [ "${MODE}" == "susfs" ]; then
+    (cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/dev_susfs/kernel/setup.sh" | bash -s dev_susfs)
+    patch -p1 < prebuilts/susfs_sm8550.patch
 fi
 
 # DIR Setting
