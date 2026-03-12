@@ -83,6 +83,15 @@ export KBUILD_EXTRA_SYMBOLS="${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/mmr
 export MODNAME=audio_dlkm
 
 export KBUILD_EXT_MODULES="../vendor/qcom/opensource/mm-drivers/msm_ext_display \
+  ../vendor/qcom/opensource/bt-kernel \
+  ../vendor/qcom/opensource/wlan \
+  ../vendor/qcom/opensource/dataipa \
+  ../vendor/qcom/opensource/eva-kernel \
+  ../vendor/qcom/opensource/graphics-kernel \
+  ../vendor/qcom/opensource/audio-hal \
+  ../vendor/qcom/opensource/datarmnet \
+  ../vendor/qcom/opensource/datarmnet-ext \
+  ../vendor/qcom/opensource/usb \
   ../vendor/qcom/opensource/mm-drivers/sync_fence \
   ../vendor/qcom/opensource/mm-drivers/hw_fence \
   ../vendor/qcom/opensource/mmrm-driver \
@@ -131,7 +140,7 @@ tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/preb
 ( env ${GKI_KERNEL_BUILD_OPTIONS} ${ANDROID_BUILD_TOP}/kernel_platform/build/android/prepare_vendor.sh sec ${TARGET_PRODUCT} || exit 1)
 
 # Copy prebuilts modules to LKM Tools
-    cp -a ${ANDROID_BUILD_TOP}/prebuilts/prebuilts/* ${ANDROID_BUILD_TOP}/out/msm-kalama-kalama-gki/dist/
+#     cp -a ${ANDROID_BUILD_TOP}/prebuilts/prebuilts/* ${ANDROID_BUILD_TOP}/out/msm-kalama-kalama-gki/dist/
 
 # Cooking vendor_boot.img
     SCRIPT_DIR="${SCRIPT_DIR}" \
