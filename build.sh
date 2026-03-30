@@ -122,6 +122,7 @@ tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/preb
 # Copying boot.img
 cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./boot.img
 
+chmod -R +x prebuilts/  
 # Cooking vendor_boot.img
     SCRIPT_DIR="${SCRIPT_DIR}" \
         "${SCRIPT_DIR}/prebuilts/build_vendor_boot.sh" || exit 1
