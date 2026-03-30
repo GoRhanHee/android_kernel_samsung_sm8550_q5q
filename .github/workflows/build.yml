@@ -46,7 +46,7 @@ jobs:
     - name: Upload Kernel Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: "Fold5_Kernel_File"
+        name: "Fold5_Kernel_dist_File"
         path: |
           ./out/msm-kalama-kalama-gki/dist/*
         if-no-files-found: ignore
