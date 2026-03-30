@@ -4,6 +4,15 @@ KBUILD_OPTIONS += CAMERA_KERNEL_ROOT=$(shell pwd)
 KBUILD_OPTIONS += KERNEL_ROOT=$(ROOT_DIR)/$(KERNEL_DIR)
 KBUILD_OPTIONS += MODNAME=camera
 
+EXTRA_SYMVERS := \
+    $(M)../mm-drivers/sync_fence/Module.symvers \
+    $(M)../securemsm-kernel/Module.symvers \
+    $(M)../mm-drivers/msm_ext_display/Module.symvers \
+    $(M)../mm-drivers/hw_fence/Module.symvers \
+    $(M)../mmrm-driver/Module.symvers
+
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS="$(EXTRA_SYMVERS)"
+
 all: modules
 
 CAMERA_COMPILE_TIME = $(shell date)

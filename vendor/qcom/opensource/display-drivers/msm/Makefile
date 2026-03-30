@@ -2,6 +2,14 @@
 
 KBUILD_OPTIONS+= DISPLAY_ROOT=$(KERNEL_SRC)/$(M)/../
 
+KBUILD_EXTRA_SYMBOLS :=$(M)/../../mm-drivers/sync_fence/Module.symvers
+KBUILD_EXTRA_SYMBOLS +=$(M)/../../securemsm-kernel/Module.symvers
+KBUILD_EXTRA_SYMBOLS +=$(M)/../../mm-drivers/msm_ext_display/Module.symvers
+KBUILD_EXTRA_SYMBOLS +=$(M)/../../mm-drivers/hw_fence/Module.symvers
+KBUILD_EXTRA_SYMBOLS +=$(M)/../../mmrm-driver/Module.symvers
+
+KBUILD_OPTIONS += KBUILD_EXTRA_SYMBOLS="$(KBUILD_EXTRA_SYMBOLS)"
+
 all: modules
 
 modules_install:
