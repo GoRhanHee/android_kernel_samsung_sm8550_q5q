@@ -39,7 +39,7 @@ jobs:
       with:
         name: "Fold5_Kernel_File"
         path: |
-          ./out/msm-kalama-kalama-gki/dist/boot.img
+          ./*.img
           ./out/msm-kalama-kalama-gki/dist/*.ko
         if-no-files-found: ignore 
 
