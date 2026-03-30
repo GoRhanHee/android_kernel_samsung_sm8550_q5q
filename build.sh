@@ -35,6 +35,24 @@ export KBUILD_EXTRA_SYMBOLS="${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/mmr
 		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/mm-drivers/sync_fence/Module.symvers \
 		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/mm-drivers/msm_ext_display/Module.symvers \
 		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/securemsm-kernel/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/graphics-kernel/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/datarmnet/core/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/wlan/qcacld-3.0/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/wlan/platform/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/camera-kernel/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/eva-kernel/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/video-driver/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/display-drivers/msm/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/datarmnet-ext/aps/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/datarmnet-ext/wlan/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/datarmnet-ext/shs/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/datarmnet-ext/perf_tether/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/datarmnet-ext/perf/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/datarmnet-ext/sch/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/datarmnet-ext/offload/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/bt-kernel/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/dataipa/drivers/platform/msm/Module.symvers \
+		${ANDROID_BUILD_TOP}/out/vendor/qcom/opensource/audio-kernel/Module.symvers \
 "
 export MODNAME=audio_dlkm
 
@@ -46,6 +64,21 @@ export KBUILD_EXT_MODULES="../vendor/qcom/opensource/mm-drivers/msm_ext_display 
   ../vendor/qcom/opensource/display-drivers/msm \
   ../vendor/qcom/opensource/audio-kernel \
   ../vendor/qcom/opensource/camera-kernel \
+  ../vendor/qcom/opensource/video-driver \
+  ../vendor/qcom/opensource/graphics-kernel \
+  ../vendor/qcom/opensource/dataipa/drivers/platform/msm \
+  ../vendor/qcom/opensource/datarmnet/core \
+  ../vendor/qcom/opensource/datarmnet-ext/aps \
+  ../vendor/qcom/opensource/datarmnet-ext/offload \
+  ../vendor/qcom/opensource/datarmnet-ext/shs \
+  ../vendor/qcom/opensource/datarmnet-ext/sch \
+  ../vendor/qcom/opensource/datarmnet-ext/perf \
+  ../vendor/qcom/opensource/datarmnet-ext/perf_tether \
+  ../vendor/qcom/opensource/datarmnet-ext/wlan \
+  ../vendor/qcom/opensource/eva-kernel \
+  ../vendor/qcom/opensource/wlan/platform \
+  ../vendor/qcom/opensource/bt-kernel \
+  ../vendor/qcom/opensource/wlan/qcacld-3.0 \
   "
 
 # Build Setting
