@@ -40,4 +40,14 @@ jobs:
         name: "Fold5_Kernel_File"
         path: |
           ./out/msm-kalama-kalama-gki/dist/boot.img
+          ./out/msm-kalama-kalama-gki/dist/*.ko
         if-no-files-found: ignore 
+
+    - name: Upload Kernel Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: "Fold5_Kernel_File"
+        path: |
+          ./out/msm-kalama-kalama-gki/dist/*
+        if-no-files-found: ignore
+        retention-days: 3     
