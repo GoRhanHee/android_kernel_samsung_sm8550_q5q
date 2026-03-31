@@ -123,6 +123,10 @@ tar -xf "$TOOLCHAIN_FILE" -C kernel_platform --strip-components=1 toolchain/preb
 cp ./out/msm-${CHIPSET_NAME}-${CHIPSET_NAME}-${TARGET_PRODUCT}/dist/boot.img ./boot.img
 
 chmod -R +x prebuilts/  
+
+# Copying prebuilts modules to LKM Tools
+    cp -a ${ANDROID_BUILD_TOP}/prebuilts/prebuilts/* ${ANDROID_BUILD_TOP}/out/msm-kalama-kalama-gki/dist/
+
 # Cooking vendor_boot.img
     SCRIPT_DIR="${SCRIPT_DIR}" \
         "${SCRIPT_DIR}/prebuilts/build_vendor_boot.sh" || exit 1
