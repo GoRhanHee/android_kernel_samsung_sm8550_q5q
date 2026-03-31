@@ -148,7 +148,7 @@ is_empty_partition() {
 load_metadata() {
     local metadata_file="$1"
     [ ! -f "$metadata_file" ] && return
-    while IFS='=' read -r key value; do
+    while IFS='=' read -r key value || [[ -n $key ]]; do
         [[ "$key" =~ ^[[:space:]]*# ]] && continue
         [[ -z "$key" ]] && continue
         export "${key}"="${value}"
@@ -1157,7 +1157,7 @@ run_non_interactive() {
     local quiet_mode="${2:-false}"
     echo -e "\n${BLUE}Running non-interactive with: ${BOLD}$config_file${RESET}"
     declare -A CONFIG
-    while IFS='=' read -r key value; do if [[ ! "$key" =~ ^\# && -n "$key" ]]; then CONFIG["$key"]="$value"; fi; done < "$config_file"
+    while IFS='=' read -r key value || [[ -n $key ]]; do if [[ ! "$key" =~ ^\# && -n "$key" ]]; then CONFIG["$key"]="$value"; fi; done < "$config_file"
     ACTION="${CONFIG[ACTION]}"
     if [ -z "$ACTION" ]; then echo -e "${RED}Error: 'ACTION' not defined.${RESET}"; exit 1; fi
     trap '' INT TERM EXIT
