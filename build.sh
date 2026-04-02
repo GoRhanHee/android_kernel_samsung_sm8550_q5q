@@ -134,3 +134,6 @@ chmod -R +x prebuilts/
 # Cooking vendor_dlkm.img
     SCRIPT_DIR="${SCRIPT_DIR}" \
         "${SCRIPT_DIR}/prebuilts/build_vendor_dlkm.sh" || exit 1
+
+# Cooking Odin flashable tar file
+tar -cvf Fold5_KernelSU.tar boot.img vendor_boot.img        

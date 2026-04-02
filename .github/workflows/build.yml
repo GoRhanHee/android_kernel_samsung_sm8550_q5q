@@ -37,13 +37,26 @@ jobs:
     - name: Upload KernelSU Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: "Fold5_Kernel_File"
+        name: "Fold5_KernelSU_File"
         path: |
           ./*.img
-          ./out/msm-kalama-kalama-gki/dist/*.ko
+          ./*.tar
         if-no-files-found: ignore 
-
+    
     - name: Upload Kernel Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: "Fold5_Kernel_File"
+        path: |
+          ./out/msm-kalama-kalama-gki/dist/Image
+          ./out/msm-kalama-kalama-gki/dist/Image-gz
+          ./out/msm-kalama-kalama-gki/dist/*.dtb
+          ./out/msm-kalama-kalama-gki/dist/*.dtbo
+          ./out/msm-kalama-kalama-gki/dist/dtbo.img
+          ./out/msm-kalama-kalama-gki/dist/*.ko
+        if-no-files-found: ignore     
+
+    - name: Upload Dist Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: "Fold5_Kernel_dist_File"
