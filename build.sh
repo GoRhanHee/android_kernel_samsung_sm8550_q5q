@@ -7,7 +7,7 @@ git submodule update --init --remote --depth 1 kernel_platform/common
 (cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -)
 
 # Patch SuSFS
-patch -p1 -d kernel_platform/common < prebuilts/ksun.patch
+patch -p1 -d kernel_platform/common/KernelSU-Next < prebuilts/ksun.patch
 
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
