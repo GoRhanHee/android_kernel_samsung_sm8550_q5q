@@ -3,8 +3,8 @@
 # Import common kernel
 git submodule update --init --remote --depth 1 kernel_platform/common
 
-# Import KernelSU-Next
-(cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -)
+# Import KernelSU-Next with SuSFS
+(cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/pershoot/KernelSU-Next/next/kernel/setup.sh" | bash - dev-susfs)
 
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
