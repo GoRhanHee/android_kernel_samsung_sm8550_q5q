@@ -12,6 +12,7 @@ patch -p1 -d kernel_platform/common/KernelSU-Next < patch/ksun.patch
 for f in patch/fix_*.patch; do
     patch -p1 -d kernel_platform/common/KernelSU-Next < "$f"
 done
+echo -e "\nCONFIG_KSU_SUSFS=y" >> custom_defconfigs/gorhanhee_defconfig
 
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
