@@ -6,12 +6,6 @@ git submodule update --init --remote --depth 1 kernel_platform/common
 # Import KernelSU-Next
 (cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s dev)
 
-# Patch SuSFS
-patch -p1 -d kernel_platform/common/KernelSU-Next < patch/ksun.patch
-for f in patch/fix_*.patch; do
-    patch -p1 -d kernel_platform/common/KernelSU-Next < "$f"
-done
-
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
 
@@ -22,7 +16,6 @@ export PROJECT_NAME=${MODEL}
 export REGION=$(echo $BUILD_TARGET | cut -d'_' -f2)
 export CARRIER=$(echo $BUILD_TARGET | cut -d'_' -f3)
 export TARGET_BUILD_VARIANT=user
-export BUILD_NUMBER=F946NKSU6ZZD1
 			
 CHIPSET_NAME=kalama
 

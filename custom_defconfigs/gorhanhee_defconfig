@@ -13,9 +13,8 @@ CONFIG_WERROR=n
 CONFIG_LOCALVERSION="-GoRhanHee_Kernel_SM8550"
 CONFIG_LOCALVERSION_AUTO=n
 
-# KernelSU_SuSFS
+# KernelSU
 CONFIG_KSU=y
-CONFIG_KSU_SUSFS=y
 
 # Kernel configurations for full DroidSpaces support
 # Copyright (C) 2026 ravindu644 <droidcasts@protonmail.com>
