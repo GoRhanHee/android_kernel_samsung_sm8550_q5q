@@ -6,7 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-            
+
     steps:
     - name: Free up workflow space
       run: |
@@ -15,8 +15,8 @@ jobs:
         ./util_free_space.sh
 
     - name: Import Kernel Source
-      uses: actions/checkout@v4   
-      
+      uses: actions/checkout@v4
+
     - name: Install Required Package
       run: |
         sudo apt-get update
@@ -24,15 +24,36 @@ jobs:
         libelf-dev erofs-utils android-sdk-libsparse-utils build-essential automake autoconf libtool pkg-config fuse3 e2fsprogs pv liblz4-dev uuid-dev \
         libfuse3-dev fuse3 f2fs-tools fuse2fs attr zlib1g-dev rsync \
         device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full \
-        pv uuid-dev libfuse3-dev f2fs-tools fuse2fs attr
+        pv uuid-dev libfuse3-dev f2fs-tools fuse2fs attr ccache
+
+    - name: Setup ccache
+      uses: hendrikmuhs/ccache-action@v1.2.19
+      with:
+        key: ccache
+        max-size: 5G
+        append-timestamp: false
+        create-symlink: true
+        job-summary: 'CCache stats'
+        evict-old-files: 'job'
+
+    - name: Add ccache to PATH
+      run: |
+        echo "/usr/lib/ccache" >> $GITHUB_PATH
 
     - name: Setting Scripts Permission
-      run: |    
-        chmod +x build.sh            
+      run: |
+        chmod +x build.sh
 
     - name: Kernel Build
-      run: |   
+      run: |
         ./build.sh
+
+    - name: Cleanup old ccache
+      shell: bash
+      run: |
+        set -euo pipefail
+        echo "Deleting old ccache..."
+        gh cache delete ccache- || true
 
     - name: Upload KernelSU Artifacts
       uses: actions/upload-artifact@v4
@@ -42,7 +63,7 @@ jobs:
           ./*.img
           ./*.tar
         if-no-files-found: ignore 
-    
+
     - name: Upload Kernel Artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -54,7 +75,7 @@ jobs:
           ./out/msm-kalama-kalama-gki/dist/*.dtbo
           ./out/msm-kalama-kalama-gki/dist/dtbo.img
           ./out/msm-kalama-kalama-gki/dist/*.ko
-        if-no-files-found: ignore     
+        if-no-files-found: ignore
 
     - name: Upload Dist Artifacts
       uses: actions/upload-artifact@v4
@@ -63,4 +84,4 @@ jobs:
         path: |
           ./out/msm-kalama-kalama-gki/dist/*
         if-no-files-found: ignore
-        retention-days: 3     
+        retention-days: 3

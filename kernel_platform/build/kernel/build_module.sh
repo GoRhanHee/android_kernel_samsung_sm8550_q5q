@@ -169,6 +169,8 @@ if [ -n "${DTC}" ]; then
   TOOL_ARGS+=("DTC=${DTC}")
 fi
 
+TOOL_ARGS+=(CC="ccache clang")
+
 # Allow hooks that refer to $CC_LD_ARG to keep working until they can be
 # updated.
 CC_LD_ARG="${TOOL_ARGS[@]}"
