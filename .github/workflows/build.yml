@@ -55,7 +55,7 @@ jobs:
       run: |
         set -euo pipefail
         echo "Deleting old ccache..."
-        gh cache delete ccache- || true
+        gh cache delete ccache-ccache- || true
 
     - name: Final Build Summary
       shell: bash
