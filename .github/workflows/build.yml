@@ -55,6 +55,17 @@ jobs:
         echo "Deleting old ccache..."
         gh cache delete ccache- || true
 
+    - name: Final Build Summary
+      shell: bash
+      run: |
+        set -euo pipefail
+        {
+          echo "### Build Summary"
+          echo ""
+          echo "CCache Statistics :"
+          echo "$(ccache -s -v)"
+        } >> "$GITHUB_STEP_SUMMARY"
+
     - name: Upload KernelSU Artifacts
       uses: actions/upload-artifact@v4
       with:
