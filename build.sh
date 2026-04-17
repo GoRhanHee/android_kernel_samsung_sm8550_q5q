@@ -6,14 +6,6 @@ git submodule update --init --remote --depth 1 kernel_platform/common
 # Import KernelSU-Next
 (cd kernel_platform/common && curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s dev)
 
-# Patch SuSFS
-patch -p1 -d kernel_platform/common < patch/susfs.patch
-patch -p1 -d kernel_platform/common/KernelSU-Next < patch/ksun.patch
-for f in patch/fix_*.patch; do
-    patch -p1 -d kernel_platform/common/KernelSU-Next < "$f"
-done
-echo -e "\nCONFIG_KSU_SUSFS=y" >> custom_defconfigs/gorhanhee_defconfig
-
 # DIR Setting
 SCRIPT_DIR="$(dirname $(readlink -fq $0))"
 
