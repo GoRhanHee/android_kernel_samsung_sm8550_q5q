@@ -600,6 +600,9 @@ if [ -n "${GKI_BUILD_CONFIG}" ]; then
 
   # Dist dir must have vmlinux.symvers, modules.builtin.modinfo, modules.builtin
   MAKE_ARGS+=("KBUILD_MIXED_TREE=$(readlink -m ${GKI_DIST_DIR})")
+
+  # Add for ccache
+  MAKE_ARGS+=(CC="ccache clang")
 else
   rm -f ${OLD_ENVIRONMENT}
 fi
