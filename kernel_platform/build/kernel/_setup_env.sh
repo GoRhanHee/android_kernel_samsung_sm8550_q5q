@@ -212,6 +212,10 @@ if [[ -n "${LLVM}" ]]; then
   tool_args+=(HOSTCXX="ccache clang++")
   tool_args+=(CC="ccache clang")
   tool_args+=(LD="${ANDROID_BUILD_TOP}/ld-wrapper")
+  HOSTCC="ccache clang"
+  HOSTCXX="ccache clang++"
+  CC="ccache clang"
+  LD="${ANDROID_BUILD_TOP}/ld-wrapper"
   AR=llvm-ar
   NM=llvm-nm
   OBJCOPY=llvm-objcopy
