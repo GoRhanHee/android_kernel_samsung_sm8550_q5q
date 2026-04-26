@@ -208,10 +208,10 @@ if [[ -n "${LLVM}" ]]; then
   # Reset a bunch of variables that the kernel's top level Makefile does, just
   # in case someone tries to use these binaries in this script such as in
   # initramfs generation below.
-  HOSTCC=clang
-  HOSTCXX=clang++
-  CC=clang
-  LD=ld.lld
+  tool_args+=(HOSTCC="ccache clang")
+  tool_args+=(HOSTCXX="ccache clang++")
+  tool_args+=(CC="ccache clang")
+  tool_args+=(LD="${ANDROID_BUILD_TOP}/ld-wrapper")
   AR=llvm-ar
   NM=llvm-nm
   OBJCOPY=llvm-objcopy
@@ -277,7 +277,7 @@ fi
 # verifies that defconfig matches the DEFCONFIG
 function check_defconfig() {
     (cd ${OUT_DIR} && \
-     make ${TOOL_ARGS} O=${OUT_DIR} savedefconfig)
+     make "${tool_args[@]}" O=${OUT_DIR} savedefconfig)
     [ "$ARCH" = "x86_64" -o "$ARCH" = "i386" ] && local ARCH=x86
     RES=0
     if [[ -f ${KERNEL_DIR}/arch/${ARCH}/configs/${DEFCONFIG} ]]; then

@@ -115,10 +115,10 @@ if [[ -n "${LLVM}" ]]; then
   # Reset a bunch of variables that the kernel's top level Makefile does, just
   # in case someone tries to use these binaries in this script such as in
   # initramfs generation below.
-  HOSTCC=clang
-  HOSTCXX=clang++
-  CC=clang
-  LD=ld.lld
+  TOOL_ARGS+=(HOSTCC="ccache clang")
+  TOOL_ARGS+=(HOSTCXX="ccache clang++")
+  TOOL_ARGS+=(CC="ccache clang")
+  TOOL_ARGS+=(LD="${ANDROID_BUILD_TOP}/ld-wrapper")
   AR=llvm-ar
   NM=llvm-nm
   OBJCOPY=llvm-objcopy
@@ -168,8 +168,6 @@ fi
 if [ -n "${DTC}" ]; then
   TOOL_ARGS+=("DTC=${DTC}")
 fi
-
-TOOL_ARGS+=(CC="ccache clang")
 
 # Allow hooks that refer to $CC_LD_ARG to keep working until they can be
 # updated.
