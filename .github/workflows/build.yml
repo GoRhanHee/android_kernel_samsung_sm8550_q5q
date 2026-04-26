@@ -64,8 +64,8 @@ jobs:
         mkdir -p "$CCACHE_DIR"
         mkdir -p "$LDCACHE_DIR"
 
-        ccache -o compression=false
-        ccache -M 5G
+        ccache -o compression=true
+        ccache -M 10G
 
         echo '#!/bin/bash' > ld-wrapper
         echo 'ld.lld "$@" --thinlto-cache-dir=$LDCACHE_DIR --thinlto-jobs=$(nproc --all)' >> ld-wrapper
