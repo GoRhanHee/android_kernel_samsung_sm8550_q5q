@@ -476,6 +476,7 @@
 # Out-of-tree modules are built in ${COMMON_OUT_DIR}/${EXT_MOD} where
 # ${EXT_MOD} is the path to the module source code.
 
+source ./_setup_env.sh
 set -e
 
 # Save environment for mixed build support.
@@ -551,6 +552,7 @@ source "${ROOT_DIR}/build/_setup_env.sh"
 export KLEAF_SUPPRESS_BUILD_SH_DEPRECATION_WARNING=1
 
 MAKE_ARGS=( "$@" )
+
 export MAKEFLAGS="-j$(nproc) ${MAKEFLAGS}"
 export MODULES_STAGING_DIR=$(readlink -m ${COMMON_OUT_DIR}/staging)
 export MODULES_PRIVATE_DIR=$(readlink -m ${COMMON_OUT_DIR}/private)
@@ -601,8 +603,6 @@ if [ -n "${GKI_BUILD_CONFIG}" ]; then
   # Dist dir must have vmlinux.symvers, modules.builtin.modinfo, modules.builtin
   MAKE_ARGS+=("KBUILD_MIXED_TREE=$(readlink -m ${GKI_DIST_DIR})")
 
-  # Add for ccache
-  MAKE_ARGS+=(CC="ccache clang")
 else
   rm -f ${OLD_ENVIRONMENT}
 fi
@@ -651,7 +651,7 @@ cd ${ROOT_DIR}
 
 if [ -n "${SKIP_IF_VERSION_MATCHES}" ]; then
   if [ -f "${DIST_DIR}/vmlinux" ]; then
-    kernelversion="$(cd ${KERNEL_DIR} && make -s ${TOOL_ARGS} O=${OUT_DIR} kernelrelease)"
+    kernelversion="$(cd ${KERNEL_DIR} && make -s "${tool_args[@]}" O=${OUT_DIR} kernelrelease)"
     # Split grep into 2 steps. "Linux version" will always be towards top and fast to find. Don't
     # need to search the entire vmlinux for it
     if [[ ! "$kernelversion" =~ .*dirty.* ]] && \
@@ -687,7 +687,7 @@ echo "========================================================"
 echo " Setting up for build"
 if [ "${SKIP_MRPROPER}" != "1" ] ; then
   set -x
-  (cd ${KERNEL_DIR} && make ${TOOL_ARGS} O=${OUT_DIR} "${MAKE_ARGS[@]}" mrproper)
+  (cd ${KERNEL_DIR} && make "${tool_args[@]}" O=${OUT_DIR} "${MAKE_ARGS[@]}" mrproper)
   set +x
 fi
 
@@ -701,7 +701,7 @@ fi
 
 if [ "${SKIP_DEFCONFIG}" != "1" ] ; then
   set -x
-  (cd ${KERNEL_DIR} && make ${TOOL_ARGS} O=${OUT_DIR} "${MAKE_ARGS[@]}" ${DEFCONFIG})
+  (cd ${KERNEL_DIR} && make "${tool_args[@]}" O=${OUT_DIR} "${MAKE_ARGS[@]}" ${DEFCONFIG})
   set +x
 
   if [ -n "${POST_DEFCONFIG_CMDS}" ]; then
@@ -717,7 +717,7 @@ fi
     echo "========================================================"
     echo " Merging custom defconfig with .config"
     (cd ${OUT_DIR} && ${MERGE_CONFIG} -m .config ${ANDROID_BUILD_TOP}/custom_defconfigs/gorhanhee_defconfig)
-    (cd ${OUT_DIR} && make O=${OUT_DIR} ${TOOL_ARGS} olddefconfig)
+    (cd ${OUT_DIR} && make O=${OUT_DIR} "${tool_args[@]}" olddefconfig)
 
 if [ "${KASAN}" = "sw_tags" ]; then
   echo "====================================================="
@@ -737,7 +737,7 @@ if [ "${KASAN}" = "sw_tags" ]; then
       -d SHADOW_CALL_STACK \
       -d RANDOMIZE_BASE
 
-      (cd ${OUT_DIR} && make ${TOOL_ARGS} O=${OUT_DIR} "${MAKE_ARGS[@]}" olddefconfig)
+      (cd ${OUT_DIR} && make "${tool_args[@]}" O=${OUT_DIR} "${MAKE_ARGS[@]}" olddefconfig)
       set +x
       LTO="none"
 fi
@@ -773,7 +773,7 @@ if [ "${LTO}" = "none" -o "${LTO}" = "thin" -o "${LTO}" = "full" ]; then
       -e LTO_CLANG_FULL \
       -d THINLTO
   fi
-  (cd ${OUT_DIR} && make ${TOOL_ARGS} O=${OUT_DIR} "${MAKE_ARGS[@]}" olddefconfig)
+  (cd ${OUT_DIR} && make "${tool_args[@]}" O=${OUT_DIR} "${MAKE_ARGS[@]}" olddefconfig)
   set +x
 elif [ -n "${LTO}" ]; then
   echo "LTO= must be one of 'none', 'thin' or 'full'."
@@ -842,7 +842,7 @@ if [ -n "${KMI_SYMBOL_LIST}" ]; then
               -d UNUSED_SYMBOLS -e TRIM_UNUSED_KSYMS \
               --set-str UNUSED_KSYMS_WHITELIST ${OUT_DIR}/abi_symbollist.raw
       (cd ${OUT_DIR} && \
-              make O=${OUT_DIR} ${TOOL_ARGS} "${MAKE_ARGS[@]}" olddefconfig)
+              make O=${OUT_DIR} "${tool_args[@]}" "${MAKE_ARGS[@]}" olddefconfig)
       # Make sure the config is applied
       grep CONFIG_UNUSED_KSYMS_WHITELIST ${OUT_DIR}/.config > /dev/null || {
         echo "ERROR: Failed to apply TRIM_NONLISTED_KMI kernel configuration" >&2
@@ -867,7 +867,7 @@ echo "========================================================"
 echo " Building kernel"
 
 set -x
-(cd ${OUT_DIR} && make O=${OUT_DIR} ${TOOL_ARGS} "${MAKE_ARGS[@]}" ${MAKE_GOALS})
+(cd ${OUT_DIR} && make O=${OUT_DIR} "${tool_args[@]}" "${MAKE_ARGS[@]}" ${MAKE_GOALS})
 set +x
 
 if [ -n "${POST_KERNEL_BUILD_CMDS}" ]; then
@@ -975,7 +975,7 @@ if [ "${BUILD_INITRAMFS}" = "1" -o  -n "${IN_KERNEL_MODULES}" ]; then
   echo " Installing kernel modules into staging directory"
 
   (cd ${OUT_DIR} &&                                                           \
-   make O=${OUT_DIR} ${TOOL_ARGS} ${MODULE_STRIP_FLAG}                        \
+   make O=${OUT_DIR} "${tool_args[@]}" ${MODULE_STRIP_FLAG}                        \
         INSTALL_MOD_PATH=${MODULES_STAGING_DIR} "${MAKE_ARGS[@]}" modules_install)
 fi
 
@@ -984,7 +984,7 @@ if [[ -z "${SKIP_EXT_MODULES}" ]] && [[ -n "${EXT_MODULES_MAKEFILE}" ]]; then
   echo " Building and installing external modules using ${EXT_MODULES_MAKEFILE}"
 
   make -f "${EXT_MODULES_MAKEFILE}" KERNEL_SRC=${ROOT_DIR}/${KERNEL_DIR} \
-          O=${OUT_DIR} ${TOOL_ARGS} ${MODULE_STRIP_FLAG}                 \
+          O=${OUT_DIR} "${tool_args[@]}" ${MODULE_STRIP_FLAG}                 \
           INSTALL_HDR_PATH="${KERNEL_UAPI_HEADERS_DIR}/usr"              \
           INSTALL_MOD_PATH=${MODULES_STAGING_DIR} "${MAKE_ARGS[@]}"
 fi
@@ -1011,9 +1011,9 @@ if [[ -z "${SKIP_EXT_MODULES}" ]] && [[ -n "${EXT_MODULES}" ]]; then
     mkdir -p ${OUT_DIR}/${EXT_MOD_REL}
     set -x
     make -C ${EXT_MOD} M=${EXT_MOD_REL} KERNEL_SRC=${ROOT_DIR}/${KERNEL_DIR}  \
-                       O=${OUT_DIR} ${TOOL_ARGS} "${MAKE_ARGS[@]}"
+                       O=${OUT_DIR} "${tool_args[@]}" "${MAKE_ARGS[@]}"
     make -C ${EXT_MOD} M=${EXT_MOD_REL} KERNEL_SRC=${ROOT_DIR}/${KERNEL_DIR}  \
-                       O=${OUT_DIR} ${TOOL_ARGS} ${MODULE_STRIP_FLAG}         \
+                       O=${OUT_DIR} "${tool_args[@]}" ${MODULE_STRIP_FLAG}         \
                        INSTALL_MOD_PATH=${MODULES_STAGING_DIR}                \
                        INSTALL_MOD_DIR="extra/${EXT_MOD}"                     \
                        INSTALL_HDR_PATH="${KERNEL_UAPI_HEADERS_DIR}/usr"      \
@@ -1100,7 +1100,7 @@ if [ -z "${SKIP_CP_KERNEL_HDR}" ]; then
   echo "========================================================"
   echo " Installing UAPI kernel headers:"
   mkdir -p "${KERNEL_UAPI_HEADERS_DIR}/usr"
-  make -C ${OUT_DIR} O=${OUT_DIR} ${TOOL_ARGS}                                \
+  make -C ${OUT_DIR} O=${OUT_DIR} "${tool_args[@]}"                                \
           INSTALL_HDR_PATH="${KERNEL_UAPI_HEADERS_DIR}/usr" "${MAKE_ARGS[@]}" \
           headers_install
   # The kernel makefiles create files named ..install.cmd and .install which

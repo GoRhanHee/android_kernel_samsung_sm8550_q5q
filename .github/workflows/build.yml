@@ -8,6 +8,21 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      LDCACHE_DIR: ${{ github.workspace }}/.lto_cache
+      CCACHE_COMPILERCHECK: "content"
+      CCACHE_NOCOMPRESS: "true"
+      CCACHE_NOHASHDIR: "true"
+      CCACHE_HARDLINK: "true"
+      CCACHE_MAXSIZE: "0"
+      CCACHE_NODEPEND: "true"
+      CCACHE_IGNOREOPTIONS: "--sysroot*"
+      CCACHE_DIRECT: "true"
+      CCACHE_FILECLONE: "true"
+      CCACHE_INODE_CACHE: "true"
+      CCACHE_UMASK: "002"
+      CCACHE_SLOPPINESS: "file_macro,time_macros,include_file_mtime,include_file_ctime,pch_defines,system_headers,locale,modules"
+      CCACHE_IS_KERNEL_COMPILING: "true"
 
     steps:
     - name: Free up workflow space
@@ -26,21 +41,49 @@ jobs:
         libelf-dev erofs-utils android-sdk-libsparse-utils build-essential automake autoconf libtool pkg-config fuse3 e2fsprogs pv liblz4-dev uuid-dev \
         libfuse3-dev fuse3 f2fs-tools fuse2fs attr zlib1g-dev rsync \
         device-tree-compiler lz4 xz-utils zlib1g-dev openjdk-17-jdk gcc g++ python3 python-is-python3 p7zip-full \
-        pv uuid-dev libfuse3-dev f2fs-tools fuse2fs attr ccache
+        pv uuid-dev libfuse3-dev f2fs-tools fuse2fs attr
 
-    - name: Setup ccache
-      uses: hendrikmuhs/ccache-action@v1.2.19
-      with:
-        key: ccache
-        max-size: 5G
-        append-timestamp: false
-        create-symlink: true
-        job-summary: 'CCache stats'
-        evict-old-files: 'job'
-
-    - name: Add ccache to PATH
+    - name: Install ccache with ECS by cctv18
+      shell: bash
       run: |
-        echo "/usr/lib/ccache" >> $GITHUB_PATH
+        set -euo pipefail
+        echo "::group::Install ccache with ECS"
+        wget -q https://github.com/nullptr-t-oss/kernel_patches/raw/refs/heads/main/bin/ccache-x86-64 -O ccache
+        sudo cp -f ./ccache /usr/bin/ccache
+        sudo chmod +x /usr/bin/ccache
+        rm -f ./ccache
+
+        echo "[DEBUG] Ccache version : $(ccache --version)"
+        echo "::endgroup::"
+
+    - name: Configure ccache & LTO caching
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        mkdir -p "$CCACHE_DIR"
+        mkdir -p "$LDCACHE_DIR"
+
+        ccache -o compression=true
+        ccache -M 10G
+
+        echo '#!/bin/bash' > ld-wrapper
+        echo 'ld.lld "$@" --thinlto-cache-dir=$LDCACHE_DIR --thinlto-jobs=$(nproc --all)' >> ld-wrapper
+        chmod +x ld-wrapper
+
+    - name: Restore ccache
+      uses: actions/cache/restore@v5
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ccache
+        restore-keys: ccache
+
+    - name: Restore LTO cache
+      uses: actions/cache/restore@v5
+      with:
+        path: ${{ env.LDCACHE_DIR }}
+        key: LTO
+        restore-keys: LTO
 
     - name: Setting Scripts Permission
       run: |
@@ -50,12 +93,25 @@ jobs:
       run: |
         ./build.sh
 
-    - name: Cleanup old ccache
+    - name: Cleanup old ccache & LTO cache
       shell: bash
       run: |
         set -euo pipefail
         echo "Deleting old ccache..."
-        gh cache delete ccache-ccache- || true
+        gh cache delete ccache || true
+        gh cache delete LTO || true
+
+    - name: Save ccache
+      uses: actions/cache/save@v5
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ccache
+
+    - name: Save LTO cache
+      uses: actions/cache/save@v5
+      with:
+        path: ${{ env.LDCACHE_DIR }}
+        key: LTO
 
     - name: Final Build Summary
       shell: bash
@@ -64,8 +120,9 @@ jobs:
         {
           echo "### Build Summary"
           echo ""
-          echo "CCache Statistics :"
-          echo "$(ccache -s -v)"
+          echo "> [!IMPORTANT]"
+          echo "> CCache Statistics :"
+          echo "> $(ccache -s -v)"
         } >> "$GITHUB_STEP_SUMMARY"
 
     - name: Upload KernelSU Artifacts
